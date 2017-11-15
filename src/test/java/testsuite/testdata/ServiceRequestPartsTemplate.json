@@ -1,0 +1,18 @@
+{
+  "content": [
+    {
+    "partConsumptionSourceSystemId":"<newSourceId>",
+    "taskCode":"<taskCode>",
+    "assetId":"<assetId>",
+    "serviceRequestCode":"<serviceRequestCode>",
+    "facilityCode": "US_1826617",
+        "description": "No. 4 left-handed Hex bolt",
+        "reference": "<reference>",
+        "quantity":,
+        "price": 5.25,
+        "sourceUpdateDate": "2017-03-21T12:59:02.000Z",
+        "country":"<country>",
+      "sourceSystemCode":"<sourceSystemCode>"
+    }
+  ]
+}

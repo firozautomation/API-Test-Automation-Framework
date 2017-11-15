@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testsuite/Retrieve-SR-Mandatory-Fields.feature</title>
+</head>
+<body>
+<div>
+<div>Verify all fields are present and data types are correctly defined for Service Request: Medium View</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/GenerateToken.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>param view = 'medium' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>def compSRid = $.content[0].srId passed</div>
+<div>print compSRid passed</div>
+</div>
+</div>
+</body>
+</html>

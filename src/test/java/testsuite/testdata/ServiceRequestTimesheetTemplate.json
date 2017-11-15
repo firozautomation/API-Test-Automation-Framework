@@ -1,0 +1,24 @@
+{
+  "content": [
+    {
+          "code": "<code>",
+          "taskCode":"<taskCode>",
+          "assetId":"<assetId>",
+          "serviceRequestCode":"<serviceRequestCode>",
+          "facilityCode": "US_1826617",
+          "projectName": "Karate DSL",
+          "startDate": "2012-07-30T21:00:00.000Z",
+          "completionDate": "2012-07-30T22:00:00.000Z",
+          "coveredHours": 1.5,
+          "coveredTravelHours": 2.0,
+          "overtimeHours": 3,
+          "overtimeTravelHours": 4,
+          "doubleOvertimeHours": 5,
+          "doubleOvertimeTravelHours": 6,
+          "totalHours": 111,
+          "sourceUpdateDate": "2017-03-21T12:59:02.000Z",
+          "country":"<country>",
+        "sourceSystemCode":"<sourceSystemCode>"
+        }
+  ]
+}

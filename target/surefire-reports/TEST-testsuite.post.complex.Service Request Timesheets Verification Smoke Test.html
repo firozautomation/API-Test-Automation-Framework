@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testsuite/post/complex/Service Request Timesheets Verification Smoke Test.feature</title>
+</head>
+<body>
+<div>
+<div>Submit a new Service Request Timesheets POST:</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>call JavaMethods.connectToMongo(env,ch) passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>def NewServiceRequestCode = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewTimesheet = JavaMethods.generateRandomNumber() passed</div>
+<div>def ServiceRequestTimesheetTemplate = read('classpath:testsuite/testdata/ServiceRequestTimesheetTemplate.json') passed</div>
+<div>replace ServiceRequestTimesheetTemplate passed</div>
+<div>path 'serviceRequests', 'tasks', 'timesheets' passed</div>
+<div>header Content-Type = 'application/json' passed</div>
+<div>request ServiceRequestTimesheetTemplate passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def loadUID = $.loadId passed</div>
+<div>assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'INSERTED') == true passed</div>
+</div>
+</div>
+<div>
+<div>Submit a new Service Request Timesheets POST with an invallid Task Code</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>call JavaMethods.connectToMongo(env,ch) passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>def NewServiceRequestCode = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewTimesheet = JavaMethods.generateRandomNumber() passed</div>
+<div>def ServiceRequestTimesheetTemplate = read('classpath:testsuite/testdata/ServiceRequestTimesheetTemplate.json') passed</div>
+<div>replace ServiceRequestTimesheetTemplate passed</div>
+<div>path 'serviceRequests', 'tasks', 'timesheets' passed</div>
+<div>header Content-Type = 'application/json' passed</div>
+<div>request ServiceRequestTimesheetTemplate passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def loadUID = $.loadId passed</div>
+<div>assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'REJECTED') == true passed</div>
+</div>
+</div>
+</body>
+</html>

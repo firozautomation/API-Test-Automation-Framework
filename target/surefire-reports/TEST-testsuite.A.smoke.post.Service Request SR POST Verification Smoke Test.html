@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testsuite/A/smoke/post/Service Request SR POST Verification Smoke Test.feature</title>
+</head>
+<body>
+<div>
+<div>Submit a new Service Request POST:</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>call JavaMethods.connectToMongo(env,ch) passed</div>
+<div>call JavaMethods.connectSQL(env,ch) passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>def NewServiceRequestCode = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewTaskCode = JavaMethods.generateRandomNumber() passed</div>
+<div>def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceTemplate.json') passed</div>
+<div>replace ServiceRequestPostTemplate passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>header Content-Type = 'application/json' passed</div>
+<div>request ServiceRequestPostTemplate passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def loadUID = $.loadId passed</div>
+<div>assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'INSERTED') == true passed</div>
+<div>def sqlQuery = 'SELECT * FROM ServiceRequest WHERE serviceRequestCode LIKE \'%' + NewServiceRequestCode + '\' AND Requester = \'Karate DSL\';' passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery, 1) == true passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param q = 'serviceRequestCode:*' + NewServiceRequestCode passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.content[0].serviceRequestCode == 'Karate-Insert: ' + NewServiceRequestCode passed</div>
+</div>
+</div>
+<div>
+<div>Submit a new Service Request POST with an invalid Asset-Id</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>call JavaMethods.connectToMongo(env,ch) passed</div>
+<div>call JavaMethods.connectSQL(env,ch) passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>def NewServiceRequestCode = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewTaskCode = JavaMethods.generateRandomNumber() passed</div>
+<div>def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceTemplate.json') passed</div>
+<div>replace ServiceRequestPostTemplate passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>header Content-Type = 'application/json' passed</div>
+<div>request ServiceRequestPostTemplate passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def loadUID = $.loadId passed</div>
+<div>assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'REJECTED') == true passed</div>
+<div>def sqlQuery = 'SELECT * FROM ServiceRequest WHERE serviceRequestCode LIKE \'%' + NewServiceRequestCode + '\' AND Requester = \'Karate DSL\';' passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery, 0) == true passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param q = 'serviceRequestCode:*' + NewServiceRequestCode passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.page.size == 0 passed</div>
+</div>
+</div>
+<div>
+<div>Verify that all appropriate values of asset availability attribute are validated</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>call JavaMethods.connectToMongo(env,ch) passed</div>
+<div>call JavaMethods.connectSQL(env,ch) passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>def NewServiceRequestCode = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewTaskCode = JavaMethods.generateRandomNumber() passed</div>
+<div>def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceTemplate.json') passed</div>
+<div>replace ServiceRequestPostTemplate passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>header Content-Type = 'application/json' passed</div>
+<div>request ServiceRequestPostTemplate passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def loadUID = $.loadId passed</div>
+<div>assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'INSERTED') == true passed</div>
+<div>def sqlQuery = 'SELECT * FROM ServiceRequest WHERE serviceRequestCode LIKE \'%' + NewServiceRequestCode + '\' AND Requester = \'Karate DSL\';' passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery, 1) == true passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param q = 'serviceRequestCode:*' + NewServiceRequestCode passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.content[0].assetAvailability == 'Down' passed</div>
+<div>def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceTemplate.json') passed</div>
+<div>replace ServiceRequestPostTemplate passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>header Content-Type = 'application/json' passed</div>
+<div>request ServiceRequestPostTemplate passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def loadUID = $.loadId passed</div>
+<div>assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'UPDATED') == true passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param q = 'serviceRequestCode:*' + NewServiceRequestCode passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.content[0].assetAvailability == 'Partial' passed</div>
+<div>def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceTemplate.json') passed</div>
+<div>replace ServiceRequestPostTemplate passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>header Content-Type = 'application/json' passed</div>
+<div>request ServiceRequestPostTemplate passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def loadUID = $.loadId passed</div>
+<div>assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'UPDATED') == true passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param q = 'serviceRequestCode:*' + NewServiceRequestCode passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.content[0].assetAvailability == 'Undefined' passed</div>
+<div>def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceTemplate.json') passed</div>
+<div>replace ServiceRequestPostTemplate passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>header Content-Type = 'application/json' passed</div>
+<div>request ServiceRequestPostTemplate passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def loadUID = $.loadId passed</div>
+<div>assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'UPDATED') == true passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param q = 'serviceRequestCode:*' + NewServiceRequestCode passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.content[0].assetAvailability == 'Retired' passed</div>
+</div>
+</div>
+</body>
+</html>

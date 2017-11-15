@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testsuite/load/Service Request Capacity Test.feature</title>
+</head>
+<body>
+<div>
+<div>Submit a new Service Request POST:</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>def NewServiceRequestCode = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewTaskCode = JavaMethods.generateRandomNumber() passed</div>
+<div>def ServiceRequestTaskPostTemplate = read('classpath:testsuite/testdata/ServiceRequestTaskTemplate.json') passed</div>
+<div>replace ServiceRequestTaskPostTemplate failed</div>
+<div>print ServiceRequestTaskPostTemplate skipped</div>
+<div>path 'serviceRequests', 'tasks' skipped</div>
+<div>header Content-Type = 'application/json' skipped</div>
+<div>request ServiceRequestTaskPostTemplate skipped</div>
+<div>header Authorization = 'Bearer ' + Token skipped</div>
+<div>method post skipped</div>
+<div>status 200 skipped</div>
+<div>def loadUID = $.loadId skipped</div>
+<div>assert JavaMethods.checkMongoCollection('Tasks', loadUID, 'INSERTED') == true skipped</div>
+<div>path 'serviceRequests', 'tasks' skipped</div>
+<div>header Authorization = 'Bearer ' + Token skipped</div>
+<div>param view = 'medium' skipped</div>
+<div>param q = 'taskCode:*' + NewTaskCode skipped</div>
+<div>method get skipped</div>
+<div>status 200 skipped</div>
+<div>match response $.page.size == 1 skipped</div>
+<div>match response $.content[0].taskId == 'Karate-Insert: ' + NewTaskCode skipped</div>
+<div>def fptaskId = $.content[0].taskId skipped</div>
+<div>def fptaskCode = $.content[0].taskCode skipped</div>
+<div>def ServiceRequestPartsTemplate = read('classpath:testsuite/testdata/ServiceRequestPartsTemplate.json') skipped</div>
+<div>replace ServiceRequestPartsTemplate skipped</div>
+<div>path 'serviceRequests', 'tasks', 'parts' skipped</div>
+<div>header Content-Type = 'application/json' skipped</div>
+<div>request ServiceRequestPartsTemplate skipped</div>
+<div>header Authorization = 'Bearer ' + Token skipped</div>
+<div>method post skipped</div>
+<div>status 200 skipped</div>
+<div>def ServiceRequestTimesheetTemplate = read('classpath:testsuite/testdata/ServiceRequestTimesheetTemplate.json') skipped</div>
+<div>replace ServiceRequestTimesheetTemplate skipped</div>
+<div>path 'serviceRequests', 'tasks', 'timesheets' skipped</div>
+<div>header Content-Type = 'application/json' skipped</div>
+<div>request ServiceRequestTimesheetTemplate skipped</div>
+<div>header Authorization = 'Bearer ' + Token skipped</div>
+<div>method post skipped</div>
+<div>status 200 skipped</div>
+<div>print fptaskId skipped</div>
+<div>def sample = read('classpath:reusable/gen-data.js') skipped</div>
+<div>print someValue skipped</div>
+</div>
+</div>
+</body>
+</html>

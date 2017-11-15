@@ -1,0 +1,22 @@
+{
+  "content": [
+    {
+      "assetId": "<assetId>",
+      "country" : "CA",
+      "sourceSystemCode" : "SIEBEL",
+      "serviceRequestCode" : "CountryCodeExample2",
+      "serviceRequestTypeCode" : "servicerequestcorrective",
+      "serviceRequestStatusCode" : "Started",
+      "requester" : "<requester>",
+      "problem" : "<problem>",
+      "submissionTimestamp" : null,
+      "sourceUpdateDate": "2017-09-13T15:53:51.597Z",
+      "completionDate" : null,
+      "dueDate" : null,
+      "availabilityDate" : null,
+      "remotely" : "0",
+      "assetAvailability" : "Up",
+      "facilityCode" : "US_294629"
+    }
+  ]
+}

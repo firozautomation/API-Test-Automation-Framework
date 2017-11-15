@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testsuite/get/Service Request Task Schema Validation.feature</title>
+</head>
+<body>
+<div>
+<div>Verify pagination and size query for Service Request Task GET Method: Page = 50, size = 100</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>param page = 50 passed</div>
+<div>param size = 100 passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.page.number == 50 passed</div>
+<div>match response $.content.length() == 100 passed</div>
+</div>
+</div>
+<div>
+<div>Verify large size query of 1000 records per page for Service Request Task GET Method</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>param size = 1000 passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.content.length() == 1000 passed</div>
+</div>
+</div>
+<div>
+<div>Verify all fields are present and data types are correctly defined for Service Request Tasks: Small View</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>param view = 'short' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.page == { number: '#number', total: '#number', size: '#number', next: '#string' } passed</div>
+<div>match response $.content[0] == { srId: '#string', taskId: '#string', facilityId: '#string'} passed</div>
+</div>
+</div>
+<div>
+<div>Verify all fields are present and data types are correctly defined for Service Request Task: Medium View</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>param view = 'medium' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.page == { number: '#number', total: '#number', size: '#number', next: '#string' } passed</div>
+<div>match response $.content[0] == passed</div>
+</div>
+</div>
+<div>
+<div>Verify all fields are present and data types are correctly defined for Service Request GET{ID/Tasks}: Small View</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests/' + srId + '/tasks' passed</div>
+<div>param view = 'short' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.page == { number: '#number', total: '#number', size: '#number'} passed</div>
+<div>match response $.content[0] == { srId: '#string', taskId: '#string', facilityId: '#string'} passed</div>
+</div>
+</div>
+<div>
+<div>Verify all fields are present and data types are correctly defined for Service Request GET{ID/Tasks}: Medium View</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests/' + srId + '/tasks' passed</div>
+<div>param view = 'medium' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.page == { number: '#number', total: '#number', size: '#number'} passed</div>
+<div>match response $.content[0] == passed</div>
+</div>
+</div>
+<div>
+<div>Verify invalid ID parameter for Service Request GET{ID/Tasks} Method Returns 404</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests/blah-blahtasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method get passed</div>
+<div>status 404 passed</div>
+</div>
+</div>
+<div>
+<div>Verify query parameter for Service Request Tasks GET Method: AND, OR, LIKE</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param q = 'serviceRequestCode:' + serviceRequestCode passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.content[0].serviceRequestCode == serviceRequestCode passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param q = 'serviceRequestCode:' + serviceRequestCode + ' AND taskId:' + taskId passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.page.size == 1 passed</div>
+<div>match response $.content[0].taskId == taskId passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param q = 'serviceRequestCode:neverexists OR taskId:' + taskId passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.page.size == 1 passed</div>
+<div>match response $.content[0].taskId == taskId passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param q = 'serviceRequestCode:neverexists OR taskId:*' + taskId passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $.page.size == 1 passed</div>
+<div>match response $.content[0].taskId == taskId passed</div>
+</div>
+</div>
+<div>
+<div>Verify sorting for Service Request Tasks GET Method: Ascending, Desecnding</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param sort = 'desc:serviceRequestCode' passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param sort = 'asc:serviceRequestCode' passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param sort = 'asc:serviceRequestCode,desc:problemCode' passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+</div>
+</div>
+<div>
+<div>Verify query parameter for Service Request GET{ID/Tasks} Method: AND, OR, LIKE</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests/' + srId + '/tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param q = 'srId:' + srId passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..srId contains srId passed</div>
+<div>path 'serviceRequests/' + srId + '/tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param q = 'serviceRequestCode:' + serviceRequestCode + ' AND taskId:' + taskId passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..srId contains srId passed</div>
+</div>
+</div>
+<div>
+<div>Verify sorting for Service Request GET{ID/Tasks} Method: Ascending, Desecnding</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests/' + srId + '/tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param sort = 'desc:serviceRequestCode' passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>path 'serviceRequests/' + srId + '/tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param sort = 'asc:serviceRequestCode' passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>path 'serviceRequests/' + srId + '/tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'medium' passed</div>
+<div>param sort = 'asc:serviceRequestCode,desc:problemCode' passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+</div>
+</div>
+<div>
+<div>Verify invalid Token for Service Request Task Method:</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + 'some-whack-token' passed</div>
+<div>method get passed</div>
+<div>status 401 passed</div>
+<div>match response $.error == 'invalid_token' passed</div>
+</div>
+</div>
+<div>
+<div>Verify invalid Token for Service Request GET{ID/Tasks} Method:</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') passed</div>
+<div>def srId = retrieve.fsrId passed</div>
+<div>def taskId = retrieve.ftaskId passed</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode passed</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode passed</div>
+<div>def taskCode = retrieve.ftaskCode passed</div>
+<div>def assetId = retrieve.fassetId passed</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId passed</div>
+<div>def country = retrieve.fcountry passed</div>
+<div>path 'serviceRequests/' + srId + '/tasks' passed</div>
+<div>header Authorization = 'Bearer ' + 'some-whack-token' passed</div>
+<div>method get passed</div>
+<div>status 401 passed</div>
+<div>match response $.error == 'invalid_token' passed</div>
+</div>
+</div>
+</body>
+</html>

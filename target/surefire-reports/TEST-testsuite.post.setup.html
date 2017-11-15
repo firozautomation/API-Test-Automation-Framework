@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testsuite/post/setup.feature</title>
+</head>
+<body>
+<div>
+<div>Generate Token, Setup HTTPS Proxy, Drink Tequila</div>
+<div>
+<div>def JavaMethods = Java.type('testsuite.ResuableMethods') passed</div>
+<div>url 'https://location.ver02.geicenter.com' passed</div>
+<div>assert JavaMethods.geProxyConfig() == true passed</div>
+<div>path 'uaa', 'oauth', 'token' passed</div>
+<div>form field grant_type = 'client_credentials' passed</div>
+<div>form field response_type = 'token' passed</div>
+<div>form field client_id = 'apm_sr_refresh_client' passed</div>
+<div>form field client_secret = 'apmsrrefreshclientsecret' passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def token = $.access_token passed</div>
+<div>assert token != '' passed</div>
+</div>
+</div>
+</body>
+</html>

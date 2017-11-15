@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>examples/post/POST Examples.feature</title>
+</head>
+<body>
+<div>
+<div>Post dynamically inserted jsonBody from another file Simple Example</div>
+<div>
+<div>def JavaMethods = Java.type('testsuite.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:testsuite/setup.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://ver-02-shared-services-service-request-service.ver.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def readFromJson = read('classpath:post.json') passed</div>
+<div>replace readFromJson.assetId = '1-1MRUY2MY' passed</div>
+<div>print readFromJson passed</div>
+</div>
+</div>
+<div>
+<div>Post dynamically inserted jsonBody using Tokens within a table format STRINGS ONLY</div>
+<div>
+<div>def JavaMethods = Java.type('testsuite.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:testsuite/setup.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://ver-02-shared-services-service-request-service.ver.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def readFromJson = read('classpath:testsuite/testdata/post.json') passed</div>
+<div>replace readFromJson passed</div>
+<div>print readFromJson passed</div>
+</div>
+</div>
+<div>
+<div>Post from feature file</div>
+<div>
+<div>def JavaMethods = Java.type('testsuite.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:testsuite/setup.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://ver-02-shared-services-service-request-service.ver.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def postMessage = passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>request postMessage passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+</div>
+</div>
+<div>
+<div>Post from other file</div>
+<div>
+<div>def JavaMethods = Java.type('testsuite.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:testsuite/setup.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://ver-02-shared-services-service-request-service.ver.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def readFromJson = read('classpath:testsuite/testdata/post.json') passed</div>
+<div>path 'serviceRequests/' passed</div>
+<div>request readFromJson passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 failed</div>
+</div>
+</div>
+<div>
+<div>Add additional key-values to existing JSON using set</div>
+<div>
+<div>def JavaMethods = Java.type('testsuite.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:testsuite/setup.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://ver-02-shared-services-service-request-service.ver.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def readFromJson = read('classpath:testsuite/testdata/post.json') passed</div>
+<div>set readFromJson passed</div>
+<div>print readFromJson passed</div>
+</div>
+</div>
+<div>
+<div>Post dynamically inserted jsonBody using Variables</div>
+<div>
+<div>def JavaMethods = Java.type('testsuite.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:testsuite/setup.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://ver-02-shared-services-service-request-service.ver.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def readFromJson = read('classpath:testsuite/testdata/post.json') passed</div>
+<div>def asset = '1-1MT' passed</div>
+<div>replace readFromJson passed</div>
+<div>print readFromJson passed</div>
+</div>
+</div>
+</body>
+</html>

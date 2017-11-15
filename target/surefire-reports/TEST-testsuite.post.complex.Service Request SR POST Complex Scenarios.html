@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testsuite/post/complex/Service Request SR POST Complex Scenarios.feature</title>
+</head>
+<body>
+<div>
+<div>SR POST with Invalid date fields:</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') failed</div>
+<div>def Token = setup.token skipped</div>
+<div>def env = setup.Environment skipped</div>
+<div>def ch = setup.Channel skipped</div>
+<div>assert JavaMethods.socks5BypassConfig() == true skipped</div>
+<div>call JavaMethods.connectToMongo(env,ch) skipped</div>
+<div>call JavaMethods.connectSQL(env,ch) skipped</div>
+<div>def todaysDate = JavaMethods.returnDate(0,0) skipped</div>
+<div>def tomorrowsDate = JavaMethods.returnDate(1,0) skipped</div>
+<div>def yesterdaysDate = JavaMethods.returnDate(-1,0) skipped</div>
+<div>def invalidDate = JavaMethods.returnDate(0,-1000) skipped</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' skipped</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-SR-Mandatory-Fields.feature') skipped</div>
+<div>def srId = retrieve.fsrId skipped</div>
+<div>def taskId = retrieve.ftaskId skipped</div>
+<div>def serviceRequestCode = retrieve.fserviceRequestCode skipped</div>
+<div>def sourceSystemCode = retrieve.fsourceSystemCode skipped</div>
+<div>def taskCode = retrieve.ftaskCode skipped</div>
+<div>def assetId = retrieve.fassetId skipped</div>
+<div>def assetTblAssetId = retrieve.fassetTblAssetId skipped</div>
+<div>def country = retrieve.fcountry skipped</div>
+<div>def NewServiceRequestCode = JavaMethods.generateRandomNumber() skipped</div>
+<div>def NewTaskCode = JavaMethods.generateRandomNumber() skipped</div>
+<div>def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceComplexTemplate.json') skipped</div>
+<div>replace ServiceRequestPostTemplate skipped</div>
+<div>path 'serviceRequests/' skipped</div>
+<div>header Content-Type = 'application/json' skipped</div>
+<div>request ServiceRequestPostTemplate skipped</div>
+<div>header Authorization = 'Bearer ' + Token skipped</div>
+<div>method post skipped</div>
+<div>status 200 skipped</div>
+<div>def loadUID = $.loadId skipped</div>
+<div>assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'FAILED') == true skipped</div>
+<div>def sqlQuery = 'SELECT * FROM ServiceRequest WHERE serviceRequestCode LIKE \'%' + NewServiceRequestCode + '\' AND Requester = \'Karate DSL\';' skipped</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery, 0) == true skipped</div>
+</div>
+</div>
+</body>
+</html>

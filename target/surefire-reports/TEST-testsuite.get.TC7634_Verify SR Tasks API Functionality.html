@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testsuite/get/TC7634_Verify SR Tasks API Functionality.feature</title>
+</head>
+<body>
+<div>
+<div>Verify a task is returned with a valid ID</div>
+<div>
+<div>def JavaMethods = Java.type('testsuite.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:testsuite/setup.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://ver-02-shared-services-service-request-service.ver.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>param view = 'short' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>def taskid = $.content[0].taskId passed</div>
+<div>path 'serviceRequests', 'tasks', taskid passed</div>
+<div>param view = 'short' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+</div>
+</div>
+<div>
+<div>Verify a task is NOT returned with an invalid ID</div>
+<div>
+<div>def JavaMethods = Java.type('testsuite.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:testsuite/setup.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://ver-02-shared-services-service-request-service.ver.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>path 'serviceRequests', 'tasks', 'blah' passed</div>
+<div>param view = 'short' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method get passed</div>
+<div>status 404 passed</div>
+</div>
+</div>
+<div>
+<div>Verify a task is NOT returned with an invalid header</div>
+<div>
+<div>def JavaMethods = Java.type('testsuite.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:testsuite/setup.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>url 'http://ver-02-shared-services-service-request-service.ver.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>path 'serviceRequests', 'taskss' passed</div>
+<div>param view = 'short' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method get passed</div>
+<div>status 404 passed</div>
+</div>
+</div>
+</body>
+</html>
