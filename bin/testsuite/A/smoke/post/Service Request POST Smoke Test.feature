@@ -3,7 +3,7 @@
 #Complete documentation on the Karate DSL Framework is found in Github via https://github.com/intuit/karate
 #Author(s): APM Automated Test Team
 
-Feature: Service Request Service POST Method Verification 
+Feature: Service Request Service POST Smoke Test
 
   Background:
 

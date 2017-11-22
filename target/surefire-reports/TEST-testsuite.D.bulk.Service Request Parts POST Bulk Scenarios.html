@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testsuite/D/bulk/Service Request Parts POST Bulk Scenarios.feature</title>
+</head>
+<body>
+<div>
+<div>Submit 5 new Service Request Parts and Then Update them: Each part has a different assetId and Service Request, and TaskCode combination</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>call JavaMethods.connectToMongo(env,ch) passed</div>
+<div>call JavaMethods.connectSQL(env,ch) passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-parts-Mandatory-Fields.feature') passed</div>
+<div>def ServiceRequestCodeRecord1 = retrieve.fServiceRequestCode1 passed</div>
+<div>def ServiceRequestCodeRecord2 = retrieve.fServiceRequestCode2 passed</div>
+<div>def ServiceRequestCodeRecord3 = retrieve.fServiceRequestCode3 passed</div>
+<div>def ServiceRequestCodeRecord4 = retrieve.fServiceRequestCode4 passed</div>
+<div>def ServiceRequestCodeRecord5 = retrieve.fServiceRequestCode5 passed</div>
+<div>def AssetTblAssetIdRecord1 = retrieve.fAssetTblAssetId1 passed</div>
+<div>def AssetTblAssetIdRecord2 = retrieve.fAssetTblAssetId2 passed</div>
+<div>def AssetTblAssetIdRecord3 = retrieve.fAssetTblAssetId3 passed</div>
+<div>def AssetTblAssetIdRecord4 = retrieve.fAssetTblAssetId4 passed</div>
+<div>def AssetTblAssetIdRecord5 = retrieve.fAssetTblAssetId5 passed</div>
+<div>def SourceSystemCodeRecord1 = retrieve.fSourceSystemCode1 passed</div>
+<div>def SourceSystemCodeRecord2 = retrieve.fSourceSystemCode2 passed</div>
+<div>def SourceSystemCodeRecord3 = retrieve.fSourceSystemCode3 passed</div>
+<div>def SourceSystemCodeRecord4 = retrieve.fSourceSystemCode4 passed</div>
+<div>def SourceSystemCodeRecord5 = retrieve.fSourceSystemCode5 passed</div>
+<div>def CountryRecord1 = retrieve.fCountry1 passed</div>
+<div>def CountryRecord2 = retrieve.fCountry2 passed</div>
+<div>def CountryRecord3 = retrieve.fCountry3 passed</div>
+<div>def CountryRecord4 = retrieve.fCountry4 passed</div>
+<div>def CountryRecord5 = retrieve.fCountry5 passed</div>
+<div>def TaskCodeRecord1 = retrieve.fTaskCode1 passed</div>
+<div>def TaskCodeRecord2 = retrieve.fTaskCode2 passed</div>
+<div>def TaskCodeRecord3 = retrieve.fTaskCode3 passed</div>
+<div>def TaskCodeRecord4 = retrieve.fTaskCode4 passed</div>
+<div>def TaskCodeRecord5 = retrieve.fTaskCode5 passed</div>
+<div>def NewReference1 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId1 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewReference2 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId2 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewReference3 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId3 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewReference4 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId4 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewReference5 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId5 = JavaMethods.generateRandomNumber() passed</div>
+<div>def ServiceRequestPartsTemplate = read('classpath:testsuite/testdata/ServiceRequestPartsTemplateComplex.json') passed</div>
+<div>replace ServiceRequestPartsTemplate passed</div>
+<div>path 'serviceRequests', 'tasks', 'parts' passed</div>
+<div>header Content-Type = 'application/json' passed</div>
+<div>request ServiceRequestPartsTemplate passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def loadUID = $.loadId passed</div>
+<div>assert JavaMethods.checkMongoCollection('Parts', loadUID, 'UPDATED') == true passed</div>
+<div>def sqlQuery1 = 'SELECT * FROM PartTypeConsumption WHERE PartConsumptionSourceSystemId LIKE \'%' + NewSourceId1 + '\';' passed</div>
+<div>def sqlQuery2 = 'SELECT * FROM PartType WHERE reference LIKE \'%' + NewReference1 + '\';' passed</div>
+<div>def sqlQuery3 = 'SELECT * FROM PartTypeConsumption WHERE PartConsumptionSourceSystemId LIKE \'%' + NewSourceId2 + '\';' passed</div>
+<div>def sqlQuery4 = 'SELECT * FROM PartType WHERE reference LIKE \'%' + NewReference2 + '\';' passed</div>
+<div>def sqlQuery5 = 'SELECT * FROM PartTypeConsumption WHERE PartConsumptionSourceSystemId LIKE \'%' + NewSourceId3 + '\';' passed</div>
+<div>def sqlQuery6 = 'SELECT * FROM PartType WHERE reference LIKE \'%' + NewReference3 + '\';' passed</div>
+<div>def sqlQuery7 = 'SELECT * FROM PartTypeConsumption WHERE PartConsumptionSourceSystemId LIKE \'%' + NewSourceId4 + '\';' passed</div>
+<div>def sqlQuery8 = 'SELECT * FROM PartType WHERE reference LIKE \'%' + NewReference4 + '\';' passed</div>
+<div>def sqlQuery9 = 'SELECT * FROM PartTypeConsumption WHERE PartConsumptionSourceSystemId LIKE \'%' + NewSourceId5 + '\';' passed</div>
+<div>def sqlQuery10 = 'SELECT * FROM PartType WHERE reference LIKE \'%' + NewReference5 + '\';' passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery1, 1) == true passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery2, 1) == true passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery3, 1) == true passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery4, 1) == true passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery5, 1) == true passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery6, 1) == true passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery7, 1) == true passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery8, 1) == true passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery9, 1) == true passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery10, 1) == true passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'full' passed</div>
+<div>param q = 'serviceRequestCode:' + ServiceRequestCodeRecord1 + ' AND taskCode:' + TaskCodeRecord1 passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..parts[*].reference contains 'Karate-Insert' + NewReference1 passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'full' passed</div>
+<div>param q = 'serviceRequestCode:' + ServiceRequestCodeRecord2 + ' AND taskCode:' + TaskCodeRecord2 passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..parts[*].reference contains 'Karate-Insert' + NewReference2 passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'full' passed</div>
+<div>param q = 'serviceRequestCode:' + ServiceRequestCodeRecord3 + ' AND taskCode:' + TaskCodeRecord3 passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..parts[*].reference contains 'Karate-Insert' + NewReference3 passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'full' passed</div>
+<div>param q = 'serviceRequestCode:' + ServiceRequestCodeRecord4 + ' AND taskCode:' + TaskCodeRecord4 passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..parts[*].reference contains 'Karate-Insert' + NewReference4 passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'full' passed</div>
+<div>param q = 'serviceRequestCode:' + ServiceRequestCodeRecord5 + ' AND taskCode:' + TaskCodeRecord5 passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..parts[*].reference contains 'Karate-Insert' + NewReference5 passed</div>
+<div>def ServiceRequestPartsTemplate = read('classpath:testsuite/testdata/ServiceRequestPartsTemplateComplex.json') passed</div>
+<div>replace ServiceRequestPartsTemplate passed</div>
+<div>path 'serviceRequests', 'tasks', 'parts' passed</div>
+<div>header Content-Type = 'application/json' passed</div>
+<div>request ServiceRequestPartsTemplate passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def loadUID = $.loadId passed</div>
+<div>assert JavaMethods.checkMongoCollection('Parts', loadUID, 'UPDATED') == true passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'full' passed</div>
+<div>param q = 'serviceRequestCode:' + ServiceRequestCodeRecord1 + ' AND taskCode:' + TaskCodeRecord1 passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..parts[*].description contains 'No. 1 left-handed Hex bolt UPDATE' passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'full' passed</div>
+<div>param q = 'serviceRequestCode:' + ServiceRequestCodeRecord2 + ' AND taskCode:' + TaskCodeRecord2 passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..parts[*].description contains 'No. 2 left-handed Hex bolt UPDATE' passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'full' passed</div>
+<div>param q = 'serviceRequestCode:' + ServiceRequestCodeRecord3 + ' AND taskCode:' + TaskCodeRecord3 passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..parts[*].description contains 'No. 3 left-handed Hex bolt UPDATE' passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'full' passed</div>
+<div>param q = 'serviceRequestCode:' + ServiceRequestCodeRecord4 + ' AND taskCode:' + TaskCodeRecord4 passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..parts[*].description contains 'No. 4 left-handed Hex bolt UPDATE' passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'full' passed</div>
+<div>param q = 'serviceRequestCode:' + ServiceRequestCodeRecord5 + ' AND taskCode:' + TaskCodeRecord5 passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..parts[*].description contains 'No. 5 left-handed Hex bolt UPDATE' passed</div>
+</div>
+</div>
+<div>
+<div>Insert 5 Duplicate Reference Parts for each new Part Type Consumption</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>call JavaMethods.connectToMongo(env,ch) passed</div>
+<div>call JavaMethods.connectSQL(env,ch) passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-parts-Mandatory-Fields.feature') passed</div>
+<div>def ServiceRequestCodeRecord1 = retrieve.fServiceRequestCode1 passed</div>
+<div>def ServiceRequestCodeRecord2 = retrieve.fServiceRequestCode2 passed</div>
+<div>def ServiceRequestCodeRecord3 = retrieve.fServiceRequestCode3 passed</div>
+<div>def ServiceRequestCodeRecord4 = retrieve.fServiceRequestCode4 passed</div>
+<div>def ServiceRequestCodeRecord5 = retrieve.fServiceRequestCode5 passed</div>
+<div>def AssetTblAssetIdRecord1 = retrieve.fAssetTblAssetId1 passed</div>
+<div>def AssetTblAssetIdRecord2 = retrieve.fAssetTblAssetId2 passed</div>
+<div>def AssetTblAssetIdRecord3 = retrieve.fAssetTblAssetId3 passed</div>
+<div>def AssetTblAssetIdRecord4 = retrieve.fAssetTblAssetId4 passed</div>
+<div>def AssetTblAssetIdRecord5 = retrieve.fAssetTblAssetId5 passed</div>
+<div>def SourceSystemCodeRecord1 = retrieve.fSourceSystemCode1 passed</div>
+<div>def SourceSystemCodeRecord2 = retrieve.fSourceSystemCode2 passed</div>
+<div>def SourceSystemCodeRecord3 = retrieve.fSourceSystemCode3 passed</div>
+<div>def SourceSystemCodeRecord4 = retrieve.fSourceSystemCode4 passed</div>
+<div>def SourceSystemCodeRecord5 = retrieve.fSourceSystemCode5 passed</div>
+<div>def CountryRecord1 = retrieve.fCountry1 passed</div>
+<div>def CountryRecord2 = retrieve.fCountry2 passed</div>
+<div>def CountryRecord3 = retrieve.fCountry3 passed</div>
+<div>def CountryRecord4 = retrieve.fCountry4 passed</div>
+<div>def CountryRecord5 = retrieve.fCountry5 passed</div>
+<div>def TaskCodeRecord1 = retrieve.fTaskCode1 passed</div>
+<div>def TaskCodeRecord2 = retrieve.fTaskCode2 passed</div>
+<div>def TaskCodeRecord3 = retrieve.fTaskCode3 passed</div>
+<div>def TaskCodeRecord4 = retrieve.fTaskCode4 passed</div>
+<div>def TaskCodeRecord5 = retrieve.fTaskCode5 passed</div>
+<div>def NewReference1 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId1 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewReference2 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId2 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewReference3 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId3 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewReference4 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId4 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewReference5 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId5 = JavaMethods.generateRandomNumber() passed</div>
+<div>def ServiceRequestPartsTemplate = read('classpath:testsuite/testdata/ServiceRequestPartsTemplateComplex.json') passed</div>
+<div>replace ServiceRequestPartsTemplate passed</div>
+<div>path 'serviceRequests', 'tasks', 'parts' passed</div>
+<div>header Content-Type = 'application/json' passed</div>
+<div>request ServiceRequestPartsTemplate passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def loadUID = $.loadId passed</div>
+<div>assert JavaMethods.checkMongoCollection('Parts', loadUID, 'UPDATED') == true passed</div>
+<div>def sqlQuery1 = 'SELECT * FROM PartTypeConsumption WHERE PartConsumptionSourceSystemId LIKE \'%' + NewSourceId1 + '\';' passed</div>
+<div>def sqlQuery2 = 'SELECT * FROM PartType WHERE reference LIKE \'%' + NewReference1 + 'Karate-Insert%\';' passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery1, 1) == true passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery2, 5) == true passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'full' passed</div>
+<div>param q = 'serviceRequestCode:' + ServiceRequestCodeRecord1 + ' AND taskCode:' + TaskCodeRecord1 passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..parts[*].reference contains NewReference1 + 'Karate-Insert1' passed</div>
+<div>match response $..parts[*].reference contains NewReference1 + 'Karate-Insert2' passed</div>
+<div>match response $..parts[*].reference contains NewReference1 + 'Karate-Insert3' passed</div>
+<div>match response $..parts[*].reference contains NewReference1 + 'Karate-Insert4' passed</div>
+<div>match response $..parts[*].reference contains NewReference1 + 'Karate-Insert5' passed</div>
+</div>
+</div>
+<div>
+<div>Insert 5 Duplicate Part Consumption Parts and duplicate reference parts</div>
+<div>
+<div>def JavaMethods = Java.type('reusable.ResuableMethods') passed</div>
+<div>def setup = callonce read('classpath:reusable/Generate-Token.feature') passed</div>
+<div>def Token = setup.token passed</div>
+<div>def env = setup.Environment passed</div>
+<div>def ch = setup.Channel passed</div>
+<div>assert JavaMethods.socks5BypassConfig() == true passed</div>
+<div>call JavaMethods.connectToMongo(env,ch) passed</div>
+<div>call JavaMethods.connectSQL(env,ch) passed</div>
+<div>url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/' passed</div>
+<div>def retrieve = callonce read('classpath:reusable/Retrieve-parts-Mandatory-Fields.feature') passed</div>
+<div>def ServiceRequestCodeRecord1 = retrieve.fServiceRequestCode1 passed</div>
+<div>def ServiceRequestCodeRecord2 = retrieve.fServiceRequestCode2 passed</div>
+<div>def ServiceRequestCodeRecord3 = retrieve.fServiceRequestCode3 passed</div>
+<div>def ServiceRequestCodeRecord4 = retrieve.fServiceRequestCode4 passed</div>
+<div>def ServiceRequestCodeRecord5 = retrieve.fServiceRequestCode5 passed</div>
+<div>def AssetTblAssetIdRecord1 = retrieve.fAssetTblAssetId1 passed</div>
+<div>def AssetTblAssetIdRecord2 = retrieve.fAssetTblAssetId2 passed</div>
+<div>def AssetTblAssetIdRecord3 = retrieve.fAssetTblAssetId3 passed</div>
+<div>def AssetTblAssetIdRecord4 = retrieve.fAssetTblAssetId4 passed</div>
+<div>def AssetTblAssetIdRecord5 = retrieve.fAssetTblAssetId5 passed</div>
+<div>def SourceSystemCodeRecord1 = retrieve.fSourceSystemCode1 passed</div>
+<div>def SourceSystemCodeRecord2 = retrieve.fSourceSystemCode2 passed</div>
+<div>def SourceSystemCodeRecord3 = retrieve.fSourceSystemCode3 passed</div>
+<div>def SourceSystemCodeRecord4 = retrieve.fSourceSystemCode4 passed</div>
+<div>def SourceSystemCodeRecord5 = retrieve.fSourceSystemCode5 passed</div>
+<div>def CountryRecord1 = retrieve.fCountry1 passed</div>
+<div>def CountryRecord2 = retrieve.fCountry2 passed</div>
+<div>def CountryRecord3 = retrieve.fCountry3 passed</div>
+<div>def CountryRecord4 = retrieve.fCountry4 passed</div>
+<div>def CountryRecord5 = retrieve.fCountry5 passed</div>
+<div>def TaskCodeRecord1 = retrieve.fTaskCode1 passed</div>
+<div>def TaskCodeRecord2 = retrieve.fTaskCode2 passed</div>
+<div>def TaskCodeRecord3 = retrieve.fTaskCode3 passed</div>
+<div>def TaskCodeRecord4 = retrieve.fTaskCode4 passed</div>
+<div>def TaskCodeRecord5 = retrieve.fTaskCode5 passed</div>
+<div>def NewReference1 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId1 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewReference2 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId2 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewReference3 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId3 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewReference4 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId4 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewReference5 = JavaMethods.generateRandomNumber() passed</div>
+<div>def NewSourceId5 = JavaMethods.generateRandomNumber() passed</div>
+<div>def ServiceRequestPartsTemplate = read('classpath:testsuite/testdata/ServiceRequestPartsTemplateComplex.json') passed</div>
+<div>replace ServiceRequestPartsTemplate passed</div>
+<div>path 'serviceRequests', 'tasks', 'parts' passed</div>
+<div>header Content-Type = 'application/json' passed</div>
+<div>request ServiceRequestPartsTemplate passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>method post passed</div>
+<div>status 200 passed</div>
+<div>def loadUID = $.loadId passed</div>
+<div>assert JavaMethods.checkMongoCollection('Parts', loadUID, 'UPDATED') == true passed</div>
+<div>assert JavaMethods.checkMongoCollection('Parts', loadUID, 'FAILED') == true passed</div>
+<div>def sqlQuery1 = 'SELECT * FROM PartTypeConsumption WHERE PartConsumptionSourceSystemId LIKE \'%' + NewSourceId1 + '\';' passed</div>
+<div>def sqlQuery2 = 'SELECT * FROM PartType WHERE reference LIKE \'%' + NewReference1 + 'Karate-Insert%\';' passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery1, 1) == true passed</div>
+<div>assert JavaMethods.executeSQLQuery(sqlQuery2, 1) == true passed</div>
+<div>path 'serviceRequests', 'tasks' passed</div>
+<div>header Authorization = 'Bearer ' + Token passed</div>
+<div>param view = 'full' passed</div>
+<div>param q = 'serviceRequestCode:' + ServiceRequestCodeRecord1 + ' AND taskCode:' + TaskCodeRecord1 passed</div>
+<div>method get passed</div>
+<div>status 200 passed</div>
+<div>match response $..parts[*].reference contains NewReference1 + 'Karate-Insert' passed</div>
+</div>
+</div>
+</body>
+</html>

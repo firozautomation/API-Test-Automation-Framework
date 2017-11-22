@@ -109,4 +109,3 @@ Feature: Service Request Parts POST Method Verification
   	
   	* assert JavaMethods.executeSQLQuery(sqlQuery, 0) == true  	
   	* assert JavaMethods.executeSQLQuery(sqlQuery2, 0) == true
-    

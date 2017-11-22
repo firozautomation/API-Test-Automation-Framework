@@ -48,6 +48,7 @@ public class ResuableMethods {
     
     public static String glblEnvironment;
     public static String glblChannel;
+	public static String ar[];
 
     public Map<String, Object> howToCallNonStaticMethodInJavaExample(String fromJs) {
         Map<String, Object> map = new HashMap<>();
@@ -223,7 +224,7 @@ public class ResuableMethods {
 	    	 }
          }
          
-         System.out.println("Mongo Query :" + andQuery);
+         System.out.println("Mongo Query :" + andQuery + "\n");
          
          if(recordFound == true){
         	 return true;
@@ -253,7 +254,8 @@ public class ResuableMethods {
         }
 	}
 	
-    System.out.println("SQL Query :" + customQuery);
+	
+    System.out.println("SQL Query :" + customQuery + "\n");
 
 		
 		if(count == expectedCount){
@@ -265,6 +267,222 @@ public class ResuableMethods {
 		}
 		
 	}
+	
+	public static boolean executeSQLQueryForExistingTasks () throws Exception{
+		
+		
+		stmt = con.createStatement();
+		result = stmt.executeQuery("SELECT Distinct TOP 5 "
+				+ "ServiceRequestCode, AssetTblAssetId, SourceSystemCode, Country, TaskCode "
+				+ "FROM dbo.sr_refresh_task_view "
+				+ "WHERE LEN(AssetTblAssetId) < 100 "
+				+ "And LEN(ServiceRequestCode) < 100 "
+				+ "AND ServiceRequestCode NOT Like '%:%' "
+				+ "AND AssetTblAssetId NOT Like '%:%' "
+				+ "AND TaskCode NOT Like '%:%';");
+		
+		ar = new String[25];
+		int num = 0;
+        
+		
+		if(result!=null){
+          while (result.next()){
+        	  
+        	  ar[num]= result.getString("ServiceRequestCode");
+        	  num++;
+        	  
+              ar[num] =  result.getString("AssetTblAssetId");
+              num++;
+              
+              ar[num] =  result.getString("SourceSystemCode");
+              num++;
+              
+              ar[num] =  result.getString("Country");
+              num++;
+              
+              ar[num] =  result.getString("TaskCode");
+              num++;              
+          }
+          System.out.println("SQL Query for Tasks Executed \n");
+          return true;
+      }else{
+    	  return false;
+      }
+	}
+	
+	public static String returnResultsForPartsSetup(int recrord, String column){
+		
+		String localreturnValue = null;
+		
+		switch(recrord){
+		
+		case 1:
+			
+			switch(column){
+			
+			case "ServiceRequestCode":
+				localreturnValue = ar[0];
+				break;
+				
+			case "AssetTblAssetId":
+				localreturnValue = ar[1];
+				break;
+				
+			case "SourceSystemCode":
+				localreturnValue = ar[2];
+				break;
+				
+			case "Country":
+				localreturnValue = ar[3];
+				break;
+				
+			case "TaskCode":
+				localreturnValue = ar[4];
+				break;
+				
+			default:
+				System.out.println("Unknown or missing column");
+				localreturnValue = null;
+				break;
+			}
+			
+			break;
+		
+		case 2:
+			
+			switch(column){
+			
+			case "ServiceRequestCode":
+				localreturnValue = ar[5];
+				break;
+				
+			case "AssetTblAssetId":
+				localreturnValue = ar[6];
+				break;
+				
+			case "SourceSystemCode":
+				localreturnValue = ar[7];
+				break;
+				
+			case "Country":
+				localreturnValue = ar[8];
+				break;
+				
+			case "TaskCode":
+				localreturnValue = ar[9];
+				break;
+				
+			default:
+				System.out.println("Unknown or missing column");
+				localreturnValue = null;
+				break;
+			}
+			
+			break;
+			
+		case 3:
+			
+			switch(column){
+			
+			case "ServiceRequestCode":
+				localreturnValue = ar[10];
+				break;
+				
+			case "AssetTblAssetId":
+				localreturnValue = ar[11];
+				break;
+				
+			case "SourceSystemCode":
+				localreturnValue = ar[12];
+				break;
+				
+			case "Country":
+				localreturnValue = ar[13];
+				break;
+				
+			case "TaskCode":
+				localreturnValue = ar[14];
+				break;	
+				
+			default:
+				System.out.println("Unknown or missing column");
+				localreturnValue = null;
+				break;
+			}
+			break;
+			
+		case 4:
+			
+			switch(column){
+			
+			case "ServiceRequestCode":
+				localreturnValue = ar[15];
+				break;
+				
+			case "AssetTblAssetId":
+				localreturnValue = ar[16];
+				break;
+				
+			case "SourceSystemCode":
+				localreturnValue = ar[17];
+				break;
+				
+			case "Country":
+				localreturnValue = ar[18];
+				break;
+				
+			case "TaskCode":
+				localreturnValue = ar[19];
+				break;	
+				
+			default:
+				System.out.println("Unknown or missing column");
+				localreturnValue = null;
+				break;
+			}
+			
+			break;
+			
+		case 5:
+			
+			switch(column){
+			
+			case "ServiceRequestCode":
+				localreturnValue = ar[20];
+				break;
+				
+			case "AssetTblAssetId":
+				localreturnValue = ar[21];
+				break;
+				
+			case "SourceSystemCode":
+				localreturnValue = ar[22];
+				break;
+				
+			case "Country":
+				localreturnValue = ar[23];
+				break;
+				
+			case "TaskCode":
+				localreturnValue = ar[24];
+				break;	
+				
+			default:
+				System.out.println("Unknown or missing column \n");
+				localreturnValue = null;
+				break;
+			}
+			break;
+		
+		default:
+				System.out.println("Unknown or missing record \n");
+				localreturnValue = null;
+			break;
+		}		
+		return localreturnValue;
+	}
+
+	
 	
 	public static void KarateSleep(int seconds) throws Exception{
 		
@@ -295,6 +513,8 @@ public class ResuableMethods {
 		 return DateToStr;
 		
 	}
+	
+
 }
 
 /*
