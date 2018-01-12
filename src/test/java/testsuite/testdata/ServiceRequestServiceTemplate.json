@@ -1,0 +1,28 @@
+{
+  "content": [
+    {
+      "assetId": "<assetId>",
+      "country" : "<country>",
+      "sourceSystemCode" : "<sourceSystemCode>",
+      "serviceRequestCode" : "<serviceRequestCode>",
+      "serviceRequestTypeCode" : "servicerequestcorrective",
+      "serviceRequestStatusCode" : "Started",
+      "requester" : "Karate DSL",
+      "problem" : "Submitted Using Karate",
+      "submissionTimestamp" : null,
+      "sourceUpdateDate": "2017-09-13T15:53:51.597Z",
+      "completionDate" : null,
+      "sourceDescription" : "source",
+      "subSourceDescription" : "sub",
+      "dueDate" : null,
+      "availabilityDate" : null,
+      "remotely" : "0",
+      "assetAvailability" : "<assetAvailability>",
+      "facilityCode" : "US_294629",
+      "equipmentId":"Test",
+      "acquisitionMethod":1,
+      "lifeCycleStatus":1,
+      "availabilityAtAssetLevel":"Up"
+    }
+  ]
+}

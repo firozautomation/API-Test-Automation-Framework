@@ -1,0 +1,716 @@
+#Objective: Automate All Service Request Service Methods 
+#Audience: All aspired Automated Test Engineers
+#Complete documentation on the Karate DSL Framework is found in Github via https://github.com/intuit/karate
+#Author(s): APM Automated Test Team
+
+Feature: Service Request Timesheets POST Bulk Scenarios
+
+  Background:
+
+    #DO NOT MODIFY UNLESS YOUR BRAVE AND YOU KNOW WHAT YOUR DOING*******************************************************
+    * def JavaMethods = Java.type('reusable.ResuableMethods')
+    * def setup = callonce read('classpath:reusable/Generate-Token.feature')
+    * def Token = setup.token
+    * def env = setup.Environment
+    * def ch = setup.Channel
+    * assert JavaMethods.socks5BypassConfig() == true
+    * call JavaMethods.connectToMongo(env,ch)
+    * call JavaMethods.connectSQL(env,ch)
+    
+    * url 'http://' + env + '-' + ch + '-shared-services-service-request-service.' + env + '.cloud.ds.gehc.net/serviceRequest/v1/'
+    
+    #Return different dates to be used for payload
+    * def todaysDate = JavaMethods.returnDate(0,0)
+    * def tomorrowsDate = JavaMethods.returnDate(1,0)
+    * def yesterdaysDate = JavaMethods.returnDate(-1,0)
+    * def invalidDate = JavaMethods.returnDate(0,-1000)
+    
+    
+   		#Retrieves most mandatory values for Service Request Task GET method from existing payload(s)
+	    * def retrieve = callonce read('classpath:reusable/Retrieve-parts-Mandatory-Fields.feature')
+	    
+	    * def ServiceRequestCodeRecord1 = retrieve.fServiceRequestCode1
+	    * def ServiceRequestCodeRecord2 = retrieve.fServiceRequestCode2
+	    * def ServiceRequestCodeRecord3 = retrieve.fServiceRequestCode3
+	    * def ServiceRequestCodeRecord4 = retrieve.fServiceRequestCode4
+	    * def ServiceRequestCodeRecord5 = retrieve.fServiceRequestCode5
+	    
+	    * def AssetTblAssetIdRecord1 = retrieve.fAssetTblAssetId1
+	    * def AssetTblAssetIdRecord2 = retrieve.fAssetTblAssetId2
+	    * def AssetTblAssetIdRecord3 = retrieve.fAssetTblAssetId3
+	    * def AssetTblAssetIdRecord4 = retrieve.fAssetTblAssetId4
+	    * def AssetTblAssetIdRecord5 = retrieve.fAssetTblAssetId5
+	    
+	    * def SourceSystemCodeRecord1 = retrieve.fSourceSystemCode1
+	    * def SourceSystemCodeRecord2 = retrieve.fSourceSystemCode2
+	    * def SourceSystemCodeRecord3 = retrieve.fSourceSystemCode3
+	    * def SourceSystemCodeRecord4 = retrieve.fSourceSystemCode4
+	    * def SourceSystemCodeRecord5 = retrieve.fSourceSystemCode5
+	    
+	    * def CountryRecord1 = retrieve.fCountry1
+	    * def CountryRecord2 = retrieve.fCountry2
+	    * def CountryRecord3 = retrieve.fCountry3
+	    * def CountryRecord4 = retrieve.fCountry4
+	    * def CountryRecord5 = retrieve.fCountry5
+	    
+	    * def TaskCodeRecord1 = retrieve.fTaskCode1
+	    * def TaskCodeRecord2 = retrieve.fTaskCode2
+	    * def TaskCodeRecord3 = retrieve.fTaskCode3
+	    * def TaskCodeRecord4 = retrieve.fTaskCode4
+	    * def TaskCodeRecord5 = retrieve.fTaskCode5
+	    
+	    
+	    #Stuff from Java
+	    * def NewTimesheet1 = JavaMethods.generateRandomNumber()	    
+	    * def NewTimesheet2 = JavaMethods.generateRandomNumber()	
+	    * def NewTimesheet3 = JavaMethods.generateRandomNumber()	
+	    * def NewTimesheet4 = JavaMethods.generateRandomNumber()	
+	    * def NewTimesheet5 = JavaMethods.generateRandomNumber()		    	    	    	    
+    #*******************************************************************************************************************
+
+    
+    
+    Scenario: Submit 5 new Service Request Timesheets and Then Update them: Each timesheet has a different assetId, Service Request, TaskCode combination
+   
+   		* def ServiceRequestTimesheetsTemplate = read('classpath:testsuite/testdata/ServiceRequestTimesheetComplexTemplate.json')
+		* replace ServiceRequestTimesheetsTemplate
+					| 		token 				|   value   	 	  	 				      |
+				    | 		assetId1   			|   AssetTblAssetIdRecord1   	 			  |
+				    | 		assetId2   			|   AssetTblAssetIdRecord2   	 			  |
+				    | 		assetId3   			|   AssetTblAssetIdRecord3   	 			  |
+				    | 		assetId4   			|   AssetTblAssetIdRecord4   	 			  |
+				    | 		assetId5   			|   AssetTblAssetIdRecord5   	 			  |
+				    
+				    | 		country1  			|   CountryRecord1     		                  |
+				    | 		country2  			|   CountryRecord2     		                  |
+				    | 		country3  			|   CountryRecord3     		                  |
+				    | 		country4  			|   CountryRecord4     		                  |
+				    | 		country5  			|   CountryRecord5     		                  |
+				    
+					| 		sourceSystemCode1  	|   SourceSystemCodeRecord1                   |
+					| 		sourceSystemCode2  	|   SourceSystemCodeRecord2                   |
+					| 		sourceSystemCode3  	|   SourceSystemCodeRecord3                   |
+					| 		sourceSystemCode4  	|   SourceSystemCodeRecord4                   |
+					| 		sourceSystemCode5  	|   SourceSystemCodeRecord5                   |
+					
+					| 		serviceRequestCode1	|   ServiceRequestCodeRecord1 			      |
+					| 		serviceRequestCode2	|   ServiceRequestCodeRecord2 			      |
+					| 		serviceRequestCode3	|   ServiceRequestCodeRecord3 			      |
+					| 		serviceRequestCode4	|   ServiceRequestCodeRecord4 			      |
+					| 		serviceRequestCode5	|   ServiceRequestCodeRecord5 			      |
+					
+					|       taskCode1		    |   TaskCodeRecord1 		  			      |
+					|       taskCode2		    |   TaskCodeRecord2 		  			      |
+					|       taskCode3		    |   TaskCodeRecord3 		  			      |
+					|       taskCode4		    |   TaskCodeRecord4 		  			      |
+					|       taskCode5		    |   TaskCodeRecord5 		  			      |
+					
+					|       code1				|   'Karate-Insert' + NewTimesheet1 		  |
+					|       code2				|   'Karate-Insert' + NewTimesheet2		  	  |
+					|       code3				|   'Karate-Insert' + NewTimesheet3		      |
+					|       code4				|   'Karate-Insert' + NewTimesheet4		      |
+					|       code5				|   'Karate-Insert' + NewTimesheet5 		  |
+					
+					|       startDate   		|     yesterdaysDate + 'T21:00:00.000Z'		  |
+					|       completionDate      |     todaysDate + 'T15:53:51.597Z'           |
+					|       sourceUpdateDate    |     todaysDate + 'T15:53:51.597Z'           |
+					
+					
+					|       facilityCode1       |   'US_1826617'           				      |
+					|       facilityCode2       |   'US_1826617'           				  	  |
+					|       facilityCode3       |   'US_1826617'           				      |
+					|       facilityCode4       |   'US_1826617'           				      |
+					|       facilityCode5       |   'US_1826617'           				      |
+					
+					|       projectName1		|		'Karate DSL'		      			  |
+					|       projectName2		|		'Karate DSL'		      			  |
+					|       projectName3		|		'Karate DSL'		      			  |
+					|       projectName4		|		'Karate DSL'		      			  |
+					|       projectName5		|		'Karate DSL'		      			  |
+
+
+    Given path 'serviceRequests', 'tasks', 'timesheets'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestTimesheetsTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'INSERTED') == true	
+  	
+  	#Maint DB Check Point
+  	* def sqlQuery1 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet1 + '\' AND ProjectName = \'Karate DSL\';'  
+  	* def sqlQuery2 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet2 + '\' AND ProjectName = \'Karate DSL\';'  
+  	* def sqlQuery3 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet3 + '\' AND ProjectName = \'Karate DSL\';'  
+  	* def sqlQuery4 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet4 + '\' AND ProjectName = \'Karate DSL\';'  
+  	* def sqlQuery5 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet5 + '\' AND ProjectName = \'Karate DSL\';'  
+
+  	* assert JavaMethods.executeSQLQuery(sqlQuery1, 1) == true   
+   	* assert JavaMethods.executeSQLQuery(sqlQuery2, 1) == true   
+   	* assert JavaMethods.executeSQLQuery(sqlQuery3, 1) == true   
+   	* assert JavaMethods.executeSQLQuery(sqlQuery4, 1) == true   
+   	* assert JavaMethods.executeSQLQuery(sqlQuery5, 1) == true   
+  	
+  
+  	#Update to Service Check Point for Record 1
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord1 + ' AND taskCode:' + TaskCodeRecord1
+    When method get
+    Then status 200
+    And match response $..timesheets[*].code contains 'Karate-Insert' + NewTimesheet1
+
+
+  	#Update to Service Check Point for Record 2
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord2 + ' AND taskCode:' + TaskCodeRecord2
+    When method get
+    Then status 200
+    And match response $..timesheets[*].code contains 'Karate-Insert' + NewTimesheet2
+
+
+  	#Update to Service Check Point for Record 3
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord3 + ' AND taskCode:' + TaskCodeRecord3
+    When method get
+    Then status 200
+    And match response $..timesheets[*].code contains 'Karate-Insert' + NewTimesheet3
+
+
+  	#Update to Service Check Point for Record 4
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord4 + ' AND taskCode:' + TaskCodeRecord4
+    When method get
+    Then status 200
+    And match response $..timesheets[*].code contains 'Karate-Insert' + NewTimesheet4
+
+
+  	#Update to Service Check Point for Record 5
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord5 + ' AND taskCode:' + TaskCodeRecord5
+    When method get
+    Then status 200
+    And match response $..timesheets[*].code contains 'Karate-Insert' + NewTimesheet5
+
+
+  		* def ServiceRequestTimesheetsTemplate = read('classpath:testsuite/testdata/ServiceRequestTimesheetComplexTemplate.json')
+		* replace ServiceRequestTimesheetsTemplate
+					| 		token 				|   value   	 	  	 				      |
+				    | 		assetId1   			|   AssetTblAssetIdRecord1   	 			  |
+				    | 		assetId2   			|   AssetTblAssetIdRecord2   	 			  |
+				    | 		assetId3   			|   AssetTblAssetIdRecord3   	 			  |
+				    | 		assetId4   			|   AssetTblAssetIdRecord4   	 			  |
+				    | 		assetId5   			|   AssetTblAssetIdRecord5   	 			  |
+				    
+				    | 		country1  			|   CountryRecord1     		                  |
+				    | 		country2  			|   CountryRecord2     		                  |
+				    | 		country3  			|   CountryRecord3     		                  |
+				    | 		country4  			|   CountryRecord4     		                  |
+				    | 		country5  			|   CountryRecord5     		                  |
+				    
+					| 		sourceSystemCode1  	|   SourceSystemCodeRecord1                   |
+					| 		sourceSystemCode2  	|   SourceSystemCodeRecord2                   |
+					| 		sourceSystemCode3  	|   SourceSystemCodeRecord3                   |
+					| 		sourceSystemCode4  	|   SourceSystemCodeRecord4                   |
+					| 		sourceSystemCode5  	|   SourceSystemCodeRecord5                   |
+					
+					| 		serviceRequestCode1	|   ServiceRequestCodeRecord1 			      |
+					| 		serviceRequestCode2	|   ServiceRequestCodeRecord2 			      |
+					| 		serviceRequestCode3	|   ServiceRequestCodeRecord3 			      |
+					| 		serviceRequestCode4	|   ServiceRequestCodeRecord4 			      |
+					| 		serviceRequestCode5	|   ServiceRequestCodeRecord5 			      |
+					
+					|       taskCode1		    |   TaskCodeRecord1 		  			      |
+					|       taskCode2		    |   TaskCodeRecord2 		  			      |
+					|       taskCode3		    |   TaskCodeRecord3 		  			      |
+					|       taskCode4		    |   TaskCodeRecord4 		  			      |
+					|       taskCode5		    |   TaskCodeRecord5 		  			      |
+					
+					|       code1				|   'Karate-Insert' + NewTimesheet1 		  |
+					|       code2				|   'Karate-Insert' + NewTimesheet2		  	  |
+					|       code3				|   'Karate-Insert' + NewTimesheet3		      |
+					|       code4				|   'Karate-Insert' + NewTimesheet4		      |
+					|       code5				|   'Karate-Insert' + NewTimesheet5 		  |
+					
+					|       startDate   		|     yesterdaysDate + 'T21:00:00.000Z'		  |
+					|       completionDate      |     todaysDate + 'T15:53:51.597Z'           |
+					|       sourceUpdateDate    |     todaysDate + 'T15:53:51.597Z'           |
+					
+					
+					|       facilityCode1       |   'US_1826617'           				      |
+					|       facilityCode2       |   'US_1826617'           				  	  |
+					|       facilityCode3       |   'US_1826617'           				      |
+					|       facilityCode4       |   'US_1826617'           				      |
+					|       facilityCode5       |   'US_1826617'           				      |
+					
+					|       projectName1		|		'Karate DSL Update'		      		  |
+					|       projectName2		|		'Karate DSL Update'		      		  |
+					|       projectName3		|		'Karate DSL Update'		      		  |
+					|       projectName4		|		'Karate DSL Update'		      		  |
+					|       projectName5		|		'Karate DSL Update'		      		  |
+
+
+    Given path 'serviceRequests', 'tasks', 'timesheets'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestTimesheetsTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'UPDATED') == true	
+  	
+  	#Maint DB Check Point
+  	* def sqlQuery1 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet1 + '\' AND ProjectName = \'Karate DSL Update\';'  
+  	* def sqlQuery2 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet2 + '\' AND ProjectName = \'Karate DSL Update\';'  
+  	* def sqlQuery3 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet3 + '\' AND ProjectName = \'Karate DSL Update\';'  
+  	* def sqlQuery4 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet4 + '\' AND ProjectName = \'Karate DSL Update\';'  
+  	* def sqlQuery5 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet5 + '\' AND ProjectName = \'Karate DSL Update\';'  
+
+  	* assert JavaMethods.executeSQLQuery(sqlQuery1, 1) == true   
+   	* assert JavaMethods.executeSQLQuery(sqlQuery2, 1) == true   
+   	* assert JavaMethods.executeSQLQuery(sqlQuery3, 1) == true   
+   	* assert JavaMethods.executeSQLQuery(sqlQuery4, 1) == true   
+   	* assert JavaMethods.executeSQLQuery(sqlQuery5, 1) == true   
+  	
+  
+  	#Update to Service Check Point for Record 1
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord1 + ' AND taskCode:' + TaskCodeRecord1
+    When method get
+    Then status 200
+    And match response $..timesheets[*].projectName contains 'Karate DSL Update'
+
+
+  	#Update to Service Check Point for Record 2
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord2 + ' AND taskCode:' + TaskCodeRecord2
+    When method get
+    Then status 200
+    And match response $..timesheets[*].projectName contains 'Karate DSL Update'
+
+
+  	#Update to Service Check Point for Record 3
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord3 + ' AND taskCode:' + TaskCodeRecord3
+    When method get
+    Then status 200
+    And match response $..timesheets[*].projectName contains 'Karate DSL Update'
+
+
+  	#Update to Service Check Point for Record 4
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord4 + ' AND taskCode:' + TaskCodeRecord4
+    When method get
+    Then status 200
+    And match response $..timesheets[*].projectName contains 'Karate DSL Update'
+
+
+  	#Update to Service Check Point for Record 5
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord5 + ' AND taskCode:' + TaskCodeRecord5
+    When method get
+    Then status 200
+    And match response $..timesheets[*].projectName contains 'Karate DSL Update'
+
+
+		Scenario: Insert 5 Duplicate Timesheets for the same task code
+   
+   		* def ServiceRequestTimesheetsTemplate = read('classpath:testsuite/testdata/ServiceRequestTimesheetComplexTemplate.json')
+		* replace ServiceRequestTimesheetsTemplate
+					| 		token 				|   value   	 	  	 				      |
+				    | 		assetId1   			|   AssetTblAssetIdRecord1   	 			  |
+				    | 		assetId2   			|   AssetTblAssetIdRecord1   	 			  |
+				    | 		assetId3   			|   AssetTblAssetIdRecord1   	 			  |
+				    | 		assetId4   			|   AssetTblAssetIdRecord1   	 			  |
+				    | 		assetId5   			|   AssetTblAssetIdRecord1   	 			  |
+				    
+				    | 		country1  			|   CountryRecord1     		                  |
+				    | 		country2  			|   CountryRecord1     		                  |
+				    | 		country3  			|   CountryRecord1     		                  |
+				    | 		country4  			|   CountryRecord1     		                  |
+				    | 		country5  			|   CountryRecord1     		                  |
+				    
+					| 		sourceSystemCode1  	|   SourceSystemCodeRecord1                   |
+					| 		sourceSystemCode2  	|   SourceSystemCodeRecord1                   |
+					| 		sourceSystemCode3  	|   SourceSystemCodeRecord1                   |
+					| 		sourceSystemCode4  	|   SourceSystemCodeRecord1                   |
+					| 		sourceSystemCode5  	|   SourceSystemCodeRecord1                   |
+					
+					| 		serviceRequestCode1	|   ServiceRequestCodeRecord1 			      |
+					| 		serviceRequestCode2	|   ServiceRequestCodeRecord1 			      |
+					| 		serviceRequestCode3	|   ServiceRequestCodeRecord1 			      |
+					| 		serviceRequestCode4	|   ServiceRequestCodeRecord1 			      |
+					| 		serviceRequestCode5	|   ServiceRequestCodeRecord1 			      |
+					
+					|       taskCode1		    |   TaskCodeRecord1 		  			      |
+					|       taskCode2		    |   TaskCodeRecord1 		  			      |
+					|       taskCode3		    |   TaskCodeRecord1 		  			      |
+					|       taskCode4		    |   TaskCodeRecord1 		  			      |
+					|       taskCode5		    |   TaskCodeRecord1 		  			      |
+					
+					|       code1				|   'Karate-Insert' + NewTimesheet1 		  |
+					|       code2				|   'Karate-Insert' + NewTimesheet1		  	  |
+					|       code3				|   'Karate-Insert' + NewTimesheet1		      |
+					|       code4				|   'Karate-Insert' + NewTimesheet1		      |
+					|       code5				|   'Karate-Insert' + NewTimesheet1 		  |
+					
+					|       startDate   		|     yesterdaysDate + 'T21:00:00.000Z'		  |
+					|       completionDate      |     todaysDate + 'T15:53:51.597Z'           |
+					|       sourceUpdateDate    |     todaysDate + 'T15:53:51.597Z'           |
+					
+					
+					|       facilityCode1       |   'US_1826617'           				      |
+					|       facilityCode2       |   'US_1826617'           				  	  |
+					|       facilityCode3       |   'US_1826617'           				      |
+					|       facilityCode4       |   'US_1826617'           				      |
+					|       facilityCode5       |   'US_1826617'           				      |
+					
+					|       projectName1		|		'Karate DSL 1'		      			  |
+					|       projectName2		|		'Karate DSL 2'		      			  |
+					|       projectName3		|		'Karate DSL 3'		      			  |
+					|       projectName4		|		'Karate DSL 4'		      			  |
+					|       projectName5		|		'Karate DSL 5'		      			  |
+
+
+    Given path 'serviceRequests', 'tasks', 'timesheets'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestTimesheetsTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'INSERTED') == true	
+  	* assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'FAILED') == true	
+  	
+  	
+  	#Maint DB Check Point
+  	* def sqlQuery1 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet1 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+
+  	* assert JavaMethods.executeSQLQuery(sqlQuery1, 1) == true   
+  	
+  
+  	#Update to Service Check Point for Record 1
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord1 + ' AND taskCode:' + TaskCodeRecord1
+    When method get
+    Then status 200
+    And match response $..timesheets[*].code contains 'Karate-Insert' + NewTimesheet1
+
+
+
+		Scenario: Insert 5 new Timesheets with various invalid/missing/duplicate data
+   
+   		* def ServiceRequestTimesheetsTemplate = read('classpath:testsuite/testdata/ServiceRequestTimesheetComplexTemplate.json')
+		* replace ServiceRequestTimesheetsTemplate
+					| 		token 				|   value   	 	  	 				      |
+				    | 		assetId1   			|   'BlahBlah'			     	 			  |
+				    | 		assetId2   			|   AssetTblAssetIdRecord2   	 			  |
+				    | 		assetId3   			|   AssetTblAssetIdRecord3   	 			  |
+				    | 		assetId4   			|   AssetTblAssetIdRecord4   	 			  |
+				    | 		assetId5   			|   AssetTblAssetIdRecord5   	 			  |
+				    
+				    | 		country1  			|   CountryRecord1     		                  |
+				    | 		country2  			|   'NK'		     		                  |
+				    | 		country3  			|   CountryRecord3     		                  |
+				    | 		country4  			|   CountryRecord4     		                  |
+				    | 		country5  			|   CountryRecord5     		                  |
+				    
+					| 		sourceSystemCode1  	|   SourceSystemCodeRecord1                   |
+					| 		sourceSystemCode2  	|   SourceSystemCodeRecord2                   |
+					| 		sourceSystemCode3  	|   'wrong'				                      |
+					| 		sourceSystemCode4  	|   SourceSystemCodeRecord4                   |
+					| 		sourceSystemCode5  	|   SourceSystemCodeRecord5                   |
+					
+					| 		serviceRequestCode1	|   ServiceRequestCodeRecord1 			      |
+					| 		serviceRequestCode2	|   ServiceRequestCodeRecord2 			      |
+					| 		serviceRequestCode3	|   ServiceRequestCodeRecord3 			      |
+					| 		serviceRequestCode4	|   ''						 			      |
+					| 		serviceRequestCode5	|   ServiceRequestCodeRecord5 			      |
+					
+					|       taskCode1		    |   TaskCodeRecord1 		  			      |
+					|       taskCode2		    |   TaskCodeRecord2 		  			      |
+					|       taskCode3		    |   TaskCodeRecord3 		  			      |
+					|       taskCode4		    |   TaskCodeRecord4 		  			      |
+					|       taskCode5		    |   ''			    		  			      |
+					
+					|       code1				|   'Karate-Insert' + NewTimesheet1 		  |
+					|       code2				|   'Karate-Insert' + NewTimesheet2	  	  	  |
+					|       code3				|   'Karate-Insert' + NewTimesheet3		      |
+					|       code4				|   'Karate-Insert' + NewTimesheet4		      |
+					|       code5				|   'Karate-Insert' + NewTimesheet5 		  |
+					
+					|       startDate   		|     yesterdaysDate + 'T21:00:00.000Z'		  |
+					|       completionDate      |     todaysDate + 'T15:53:51.597Z'           |
+					|       sourceUpdateDate    |     todaysDate + 'T15:53:51.597Z'           |
+					
+					
+					|       facilityCode1       |   'US_1826617'           				      |
+					|       facilityCode2       |   'US_1826617'           				  	  |
+					|       facilityCode3       |   'US_1826617'           				      |
+					|       facilityCode4       |   'US_1826617'           				      |
+					|       facilityCode5       |   'US_1826617'           				      |
+					
+					|       projectName1		|		'Karate DSL 1'		      			  |
+					|       projectName2		|		'Karate DSL 2'		      			  |
+					|       projectName3		|		'Karate DSL 3'		      			  |
+					|       projectName4		|		'Karate DSL 4'		      			  |
+					|       projectName5		|		'Karate DSL 5'		      			  |
+
+
+    Given path 'serviceRequests', 'tasks', 'timesheets'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestTimesheetsTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'REJECTED') == true	
+  	* assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'FAILED') == true	
+  	
+  	
+  	#Maint DB Check Point
+  	* def sqlQuery1 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet1 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+  	* def sqlQuery2 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet2 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+  	* def sqlQuery3 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet3 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+  	* def sqlQuery4 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet4 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+  	* def sqlQuery5 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet5 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+
+  	* assert JavaMethods.executeSQLQuery(sqlQuery1, 0) == true   
+  	* assert JavaMethods.executeSQLQuery(sqlQuery2, 0) == true   
+  	* assert JavaMethods.executeSQLQuery(sqlQuery3, 0) == true   
+  	* assert JavaMethods.executeSQLQuery(sqlQuery4, 0) == true   
+  	* assert JavaMethods.executeSQLQuery(sqlQuery5, 0) == true   	    
+    
+
+	Scenario: Insert two valid timesheets within first and last payload set. Fail the set in between.
+   
+   		* def ServiceRequestTimesheetsTemplate = read('classpath:testsuite/testdata/ServiceRequestTimesheetComplexTemplate.json')
+		* replace ServiceRequestTimesheetsTemplate
+					| 		token 				|   value   	 	  	 				      |
+				    | 		assetId1   			|   AssetTblAssetIdRecord1			     	  |
+				    | 		assetId2   			|   AssetTblAssetIdRecord2   	 			  |
+				    | 		assetId3   			|   AssetTblAssetIdRecord3   	 			  |
+				    | 		assetId4   			|   AssetTblAssetIdRecord4   	 			  |
+				    | 		assetId5   			|   AssetTblAssetIdRecord5   	 			  |
+				    
+				    | 		country1  			|   CountryRecord1     		                  |
+				    | 		country2  			|   'NK'		     		                  |
+				    | 		country3  			|   CountryRecord3     		                  |
+				    | 		country4  			|   CountryRecord4     		                  |
+				    | 		country5  			|   CountryRecord5     		                  |
+				    
+					| 		sourceSystemCode1  	|   SourceSystemCodeRecord1                   |
+					| 		sourceSystemCode2  	|   SourceSystemCodeRecord2                   |
+					| 		sourceSystemCode3  	|   'wrong'				                      |
+					| 		sourceSystemCode4  	|   SourceSystemCodeRecord4                   |
+					| 		sourceSystemCode5  	|   SourceSystemCodeRecord5                   |
+					
+					| 		serviceRequestCode1	|   ServiceRequestCodeRecord1 			      |
+					| 		serviceRequestCode2	|   ServiceRequestCodeRecord2 			      |
+					| 		serviceRequestCode3	|   ServiceRequestCodeRecord3 			      |
+					| 		serviceRequestCode4	|   ''						 			      |
+					| 		serviceRequestCode5	|   ServiceRequestCodeRecord5 			      |
+					
+					|       taskCode1		    |   TaskCodeRecord1 		  			      |
+					|       taskCode2		    |   TaskCodeRecord2 		  			      |
+					|       taskCode3		    |   TaskCodeRecord3 		  			      |
+					|       taskCode4		    |   TaskCodeRecord4 		  			      |
+					|       taskCode5		    |   TaskCodeRecord5			    		      |
+					
+					|       code1				|   'Karate-Insert' + NewTimesheet1 		  |
+					|       code2				|   'Karate-Insert' + NewTimesheet2	  	  	  |
+					|       code3				|   'Karate-Insert' + NewTimesheet3		      |
+					|       code4				|   'Karate-Insert' + NewTimesheet4		      |
+					|       code5				|   'Karate-Insert' + NewTimesheet5 		  |
+					
+					|       startDate   		|     yesterdaysDate + 'T21:00:00.000Z'		  |
+					|       completionDate      |     todaysDate + 'T15:53:51.597Z'           |
+					|       sourceUpdateDate    |     todaysDate + 'T15:53:51.597Z'           |
+					
+					
+					|       facilityCode1       |   'US_1826617'           				      |
+					|       facilityCode2       |   'US_1826617'           				  	  |
+					|       facilityCode3       |   'US_1826617'           				      |
+					|       facilityCode4       |   'US_1826617'           				      |
+					|       facilityCode5       |   'US_1826617'           				      |
+					
+					|       projectName1		|		'Karate DSL 1'		      			  |
+					|       projectName2		|		'Karate DSL 2'		      			  |
+					|       projectName3		|		'Karate DSL 3'		      			  |
+					|       projectName4		|		'Karate DSL 4'		      			  |
+					|       projectName5		|		'Karate DSL 5'		      			  |
+
+
+    Given path 'serviceRequests', 'tasks', 'timesheets'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestTimesheetsTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'INSERTED') == true	
+  	* assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'REJECTED') == true	
+  	* assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'FAILED') == true	
+  	
+  	
+  	#Maint DB Check Point
+  	* def sqlQuery1 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet1 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+  	* def sqlQuery2 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet2 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+  	* def sqlQuery3 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet3 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+  	* def sqlQuery4 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet4 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+  	* def sqlQuery5 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet5 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+
+  	* assert JavaMethods.executeSQLQuery(sqlQuery1, 1) == true   
+  	* assert JavaMethods.executeSQLQuery(sqlQuery2, 0) == true   
+  	* assert JavaMethods.executeSQLQuery(sqlQuery3, 0) == true   
+  	* assert JavaMethods.executeSQLQuery(sqlQuery4, 0) == true   
+  	* assert JavaMethods.executeSQLQuery(sqlQuery5, 1) == true 
+  	
+  	
+  	#Update to Service Check Point for Record 1
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord1 + ' AND taskCode:' + TaskCodeRecord1
+    When method get
+    Then status 200
+    And match response $..timesheets[*].code contains 'Karate-Insert' + NewTimesheet1  
+
+  	#Update to Service Check Point for Record 5
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord5 + ' AND taskCode:' + TaskCodeRecord5
+    When method get
+    Then status 200
+    And match response $..timesheets[*].code contains 'Karate-Insert' + NewTimesheet5 	
+
+
+
+   		Scenario: Insert 5 new Timesheets with various invalid/missing/duplicate data for 4/5 of the parts
+   
+   		* def ServiceRequestTimesheetsTemplate = read('classpath:testsuite/testdata/ServiceRequestTimesheetComplexTemplate.json')
+		* replace ServiceRequestTimesheetsTemplate
+					| 		token 				|   value   	 	  	 				      |
+				    | 		assetId1   			|   ''								     	  |
+				    | 		assetId2   			|   AssetTblAssetIdRecord2   	 			  |
+				    | 		assetId3   			|   AssetTblAssetIdRecord3   	 			  |
+				    | 		assetId4   			|   AssetTblAssetIdRecord4   	 			  |
+				    | 		assetId5   			|   AssetTblAssetIdRecord5   	 			  |
+				    
+				    | 		country1  			|   CountryRecord1     		                  |
+				    | 		country2  			|   'NK'		     		                  |
+				    | 		country3  			|   CountryRecord3     		                  |
+				    | 		country4  			|   CountryRecord4     		                  |
+				    | 		country5  			|   CountryRecord5     		                  |
+				    
+					| 		sourceSystemCode1  	|   SourceSystemCodeRecord1                   |
+					| 		sourceSystemCode2  	|   SourceSystemCodeRecord2                   |
+					| 		sourceSystemCode3  	|   'wrong'				                      |
+					| 		sourceSystemCode4  	|   SourceSystemCodeRecord4                   |
+					| 		sourceSystemCode5  	|   SourceSystemCodeRecord5                   |
+					
+					| 		serviceRequestCode1	|   ServiceRequestCodeRecord1 			      |
+					| 		serviceRequestCode2	|   ServiceRequestCodeRecord2 			      |
+					| 		serviceRequestCode3	|   ServiceRequestCodeRecord3 			      |
+					| 		serviceRequestCode4	|   ''						 			      |
+					| 		serviceRequestCode5	|   ServiceRequestCodeRecord5 			      |
+					
+					|       taskCode1		    |   TaskCodeRecord1 		  			      |
+					|       taskCode2		    |   TaskCodeRecord2 		  			      |
+					|       taskCode3		    |   TaskCodeRecord3 		  			      |
+					|       taskCode4		    |   TaskCodeRecord4 		  			      |
+					|       taskCode5		    |   TaskCodeRecord5			    		      |
+					
+					|       code1				|   'Karate-Insert' + NewTimesheet1 		  |
+					|       code2				|   'Karate-Insert' + NewTimesheet2	  	  	  |
+					|       code3				|   'Karate-Insert' + NewTimesheet3		      |
+					|       code4				|   'Karate-Insert' + NewTimesheet4		      |
+					|       code5				|   'Karate-Insert' + NewTimesheet5 		  |
+					
+					|       startDate   		|     yesterdaysDate + 'T21:00:00.000Z'		  |
+					|       completionDate      |     todaysDate + 'T15:53:51.597Z'           |
+					|       sourceUpdateDate    |     todaysDate + 'T15:53:51.597Z'           |
+					
+					
+					|       facilityCode1       |   'US_1826617'           				      |
+					|       facilityCode2       |   'US_1826617'           				  	  |
+					|       facilityCode3       |   'US_1826617'           				      |
+					|       facilityCode4       |   'US_1826617'           				      |
+					|       facilityCode5       |   'US_1826617'           				      |
+					
+					|       projectName1		|		'Karate DSL 1'		      			  |
+					|       projectName2		|		'Karate DSL 2'		      			  |
+					|       projectName3		|		'Karate DSL 3'		      			  |
+					|       projectName4		|		'Karate DSL 4'		      			  |
+					|       projectName5		|		'Karate DSL 5'		      			  |
+
+
+    Given path 'serviceRequests', 'tasks', 'timesheets'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestTimesheetsTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'INSERTED') == true	
+  	* assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'REJECTED') == true	
+  	* assert JavaMethods.checkMongoCollection('Timesheet', loadUID, 'FAILED') == true	
+  	
+  	
+  	#Maint DB Check Point
+  	* def sqlQuery1 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet1 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+  	* def sqlQuery2 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet2 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+  	* def sqlQuery3 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet3 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+  	* def sqlQuery4 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet4 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+  	* def sqlQuery5 = 'SELECT * FROM TimeSheet WHERE Code LIKE \'%' + NewTimesheet5 + '\' AND ProjectName LIKE \'Karate DSL%\';'  
+
+  	* assert JavaMethods.executeSQLQuery(sqlQuery1, 0) == true   
+  	* assert JavaMethods.executeSQLQuery(sqlQuery2, 0) == true   
+  	* assert JavaMethods.executeSQLQuery(sqlQuery3, 0) == true   
+  	* assert JavaMethods.executeSQLQuery(sqlQuery4, 0) == true   
+  	* assert JavaMethods.executeSQLQuery(sqlQuery5, 1) == true 
+  	 
+
+  	#Update to Service Check Point for Record 5
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'full'
+    And param q = 'serviceRequestCode:' + ServiceRequestCodeRecord5 + ' AND taskCode:' + TaskCodeRecord5
+    When method get
+    Then status 200
+    And match response $..timesheets[*].code contains 'Karate-Insert' + NewTimesheet5 	        
+  	

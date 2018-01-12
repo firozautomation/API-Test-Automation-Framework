@@ -1,0 +1,592 @@
+Scenario: Verify that all appropriate values of asset availability attribute are validated
+   
+   		* def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceTemplate.json')
+		* replace ServiceRequestPostTemplate
+					| 		token 				|   value   	 	  	 				      |
+				    | 		assetId   			|   assetTblAssetId   	 				      |
+				    | 		country  			|   country     		                      |
+					| 		sourceSystemCode  	|   sourceSystemCode                          |
+					| 		serviceRequestCode	|   'Karate-Insert: ' + NewServiceRequestCode |
+					|       assetAvailability   |            'Down'							  |
+	
+
+    Given path 'serviceRequests/'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestPostTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'INSERTED') == true
+  	
+  	
+  	#Maint DB Check Point
+  	* def sqlQuery = 'SELECT * FROM ServiceRequest WHERE serviceRequestCode LIKE \'%' + NewServiceRequestCode + '\' AND Requester = \'Karate DSL\';'  
+  	* assert JavaMethods.executeSQLQuery(sqlQuery, 1) == true
+  	
+  	
+  	#Update to SOLR Check Point
+	Given path 'serviceRequests/'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param q = 'serviceRequestCode:*' + NewServiceRequestCode
+    When method get
+    Then status 200
+    And match response $.content[0].assetAvailability == 'Down'
+  	
+  	
+  	   	* def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceTemplate.json')
+  		* replace ServiceRequestPostTemplate
+					| 		token 				|   value   	 	  	 				      |
+				    | 		assetId   			|   assetTblAssetId   	 				      |
+				    | 		country  			|   country     		                      |
+					| 		sourceSystemCode  	|   sourceSystemCode                          |
+					| 		serviceRequestCode	|   'Karate-Insert: ' + NewServiceRequestCode |
+					|       assetAvailability   |            'Partial'						  |
+	
+
+  	Given path 'serviceRequests/'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestPostTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'UPDATED') == true
+  	
+  	
+	#Update to SOLR Check Point
+	Given path 'serviceRequests/'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param q = 'serviceRequestCode:*' + NewServiceRequestCode
+    When method get
+    Then status 200
+    And match response $.content[0].assetAvailability == 'Partial'
+  	
+
+  	   	* def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceTemplate.json')
+  		* replace ServiceRequestPostTemplate
+					| 		token 				|   value   	 	  	 				      |
+				    | 		assetId   			|   assetTblAssetId   	 				      |
+				    | 		country  			|   country     		                      |
+					| 		sourceSystemCode  	|   sourceSystemCode                          |
+					| 		serviceRequestCode	|   'Karate-Insert: ' + NewServiceRequestCode |
+					|       assetAvailability   |            'Undefined'					  |
+	
+
+    Given path 'serviceRequests/'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestPostTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'UPDATED') == true
+  	
+	#Update to SOLR Check Point
+	Given path 'serviceRequests/'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param q = 'serviceRequestCode:*' + NewServiceRequestCode
+    When method get
+    Then status 200
+    And match response $.content[0].assetAvailability == 'Undefined'
+  	
+
+  	   	* def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceTemplate.json')
+  	  	* replace ServiceRequestPostTemplate
+					| 		token 				|   value   	 	  	 				      |
+				    | 		assetId   			|   assetTblAssetId   	 				      |
+				    | 		country  			|   country     		                      |
+					| 		sourceSystemCode  	|   sourceSystemCode                          |
+					| 		serviceRequestCode	|   'Karate-Insert: ' + NewServiceRequestCode |
+					|       assetAvailability   |            'Retired'					  	  |
+			
+
+    Given path 'serviceRequests/'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestPostTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'UPDATED') == true
+  	
+  	
+	#Update to SOLR Check Point
+	Given path 'serviceRequests/'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param q = 'serviceRequestCode:*' + NewServiceRequestCode
+    When method get
+    Then status 200
+    And match response $.content[0].assetAvailability == 'Retired'
+    
+    
+    
+    		* print 'serviceRequestTypeCode: Corrective'
+     	* def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceFieldValidationTemplate.json')
+		* replace ServiceRequestPostTemplate
+					| 		token 						|   value   	 	  	 				      |
+				    | 		assetId   					|   assetTblAssetId   	 				      |
+				    | 		country  					|   country     		                      |
+					| 		sourceSystemCode  			|   sourceSystemCode                          |
+					| 		serviceRequestCode			|   'Karate-Insert: ' + NewServiceRequestCode |
+					|       serviceRequestStatusCode    |      'Started'		 	 				  |
+					|       serviceRequestTypeCode      |      'Corrective'		 	      			  |
+					|       requester      				|      'Karate DSL'		 	  				  |
+					|       problem      				|      'Karate Complex Scenario'		 	  |
+					|       submissionTimestamp   		|    todaysDate + 'T15:53:51.597Z'	  		  |
+					|       sourceUpdateDate   			|    todaysDate + 'T15:53:51.597Z'			  |
+				    |       completionDate   			|    todaysDate + 'T15:53:51.597Z'		      |
+					|       dueDate   					|    tomorrowsDate + 'T15:53:51.597Z'		  |
+					|       availabilityDate   			|    tomorrowsDate + 'T15:53:51.597Z'		  |
+					|       remotely  				    |            '0'							  |
+					|       assetAvailability  		    |            'Up'							  |
+					|       facilityCode   				|            'US_294629'				      |
+					|       startDate   				|     todaysDate + 'T15:53:51.597Z'		      |
+					|       requestedTimestamp   		|     todaysDate + 'T15:53:51.597Z'			  |
+					|       sourceDescription   		|     'Karate Desciption'		  	  		  |
+					|       subSourceDescription   		|     'Karate Desciption DSL'		  	      |
+	
+
+    Given path 'serviceRequests/'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestPostTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'UPDATED') == true
+  	
+  	
+  	#Maint DB Check Point
+  	* def sqlQuery = 'SELECT * FROM ServiceRequest WHERE serviceRequestCode LIKE \'%' + NewServiceRequestCode + '\' AND Requester = \'Karate DSL\';'  
+  	* assert JavaMethods.executeSQLQuery(sqlQuery, 1) == true
+  	
+  	
+  	#Update to SOLR Check Point
+	#Given path 'serviceRequests/'
+    #* header Authorization = 'Bearer ' + Token
+    #And param view = 'medium'
+    #And param q = 'serviceRequestCode:*' + NewServiceRequestCode
+    #When method get
+    #Then status 200
+    #And match response $.content[0].serviceRequestTypeCode == 'Corrective'
+    
+    
+     		* print 'serviceRequestTypeCode: Recall'
+     	* def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceFieldValidationTemplate.json')
+		* replace ServiceRequestPostTemplate
+					| 		token 						|   value   	 	  	 				      |
+				    | 		assetId   					|   assetTblAssetId   	 				      |
+				    | 		country  					|   country     		                      |
+					| 		sourceSystemCode  			|   sourceSystemCode                          |
+					| 		serviceRequestCode			|   'Karate-Insert: ' + NewServiceRequestCode |
+					|       serviceRequestStatusCode    |      'Started'		 	 				  |
+					|       serviceRequestTypeCode      |      'Recall'		 	      				  |
+					|       requester      				|      'Karate DSL'		 	  				  |
+					|       problem      				|      'Karate Complex Scenario'		 	  |
+					|       submissionTimestamp   		|    todaysDate + 'T15:53:51.597Z'	  		  |
+					|       sourceUpdateDate   			|    todaysDate + 'T15:53:51.597Z'			  |
+				    |       completionDate   			|    todaysDate + 'T15:53:51.597Z'		      |
+					|       dueDate   					|    tomorrowsDate + 'T15:53:51.597Z'		  |
+					|       availabilityDate   			|    tomorrowsDate + 'T15:53:51.597Z'		  |
+					|       remotely  				    |            '0'							  |
+					|       assetAvailability  		    |            'Up'							  |
+					|       facilityCode   				|            'US_294629'				      |
+					|       startDate   				|     todaysDate + 'T15:53:51.597Z'		      |
+					|       requestedTimestamp   		|     todaysDate + 'T15:53:51.597Z'			  |
+					|       sourceDescription   		|     'Karate Desciption'		  	  		  |
+					|       subSourceDescription   		|     'Karate Desciption DSL'		  	      |
+	
+
+    Given path 'serviceRequests/'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestPostTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'UPDATED') == true
+  	
+  	
+  	#Maint DB Check Point
+  	* def sqlQuery = 'SELECT * FROM ServiceRequest WHERE serviceRequestCode LIKE \'%' + NewServiceRequestCode + '\' AND Requester = \'Karate DSL\';'  
+  	* assert JavaMethods.executeSQLQuery(sqlQuery, 1) == true
+  	
+  	
+  	#Update to SOLR Check Point
+	#Given path 'serviceRequests/'
+    #* header Authorization = 'Bearer ' + Token
+    #And param view = 'medium'
+    #And param q = 'serviceRequestCode:*' + NewServiceRequestCode
+    #When method get
+    #Then status 200
+    #And match response $.content[0].serviceRequestTypeCode == 'Recall'
+
+
+ 		* print 'serviceRequestTypeCode: Installation and Upgrade'
+     	* def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceFieldValidationTemplate.json')
+		* replace ServiceRequestPostTemplate
+					| 		token 						|   value   	 	  	 				      |
+				    | 		assetId   					|   assetTblAssetId   	 				      |
+				    | 		country  					|   country     		                      |
+					| 		sourceSystemCode  			|   sourceSystemCode                          |
+					| 		serviceRequestCode			|   'Karate-Insert: ' + NewServiceRequestCode |
+					|       serviceRequestStatusCode    |      'Started'		 	 				  |
+					|       serviceRequestTypeCode      |      'Installation and Upgrade'		 	  |
+					|       requester      				|      'Karate DSL'		 	  				  |
+					|       problem      				|      'Karate Complex Scenario'		 	  |
+					|       submissionTimestamp   		|    todaysDate + 'T15:53:51.597Z'	  		  |
+					|       sourceUpdateDate   			|    todaysDate + 'T15:53:51.597Z'			  |
+				    |       completionDate   			|    todaysDate + 'T15:53:51.597Z'		      |
+					|       dueDate   					|    tomorrowsDate + 'T15:53:51.597Z'		  |
+					|       availabilityDate   			|    tomorrowsDate + 'T15:53:51.597Z'		  |
+					|       remotely  				    |            '0'							  |
+					|       assetAvailability  		    |            'Up'							  |
+					|       facilityCode   				|            'US_294629'				      |
+					|       startDate   				|     todaysDate + 'T15:53:51.597Z'		      |
+					|       requestedTimestamp   		|     todaysDate + 'T15:53:51.597Z'			  |
+					|       sourceDescription   		|     'Karate Desciption'		  	  		  |
+					|       subSourceDescription   		|     'Karate Desciption DSL'		  	      |
+	
+
+    Given path 'serviceRequests/'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestPostTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'UPDATED') == true
+  	
+  	
+  	#Maint DB Check Point
+  	* def sqlQuery = 'SELECT * FROM ServiceRequest WHERE serviceRequestCode LIKE \'%' + NewServiceRequestCode + '\' AND Requester = \'Karate DSL\';'  
+  	* assert JavaMethods.executeSQLQuery(sqlQuery, 1) == true
+  	
+  	
+  	#Update to SOLR Check Point
+	#Given path 'serviceRequests/'
+    #* header Authorization = 'Bearer ' + Token
+    #And param view = 'medium'
+    #And param q = 'serviceRequestCode:*' + NewServiceRequestCode
+    #When method get
+    #Then status 200
+    #And match response $.content[0].serviceRequestTypeCode == 'Installation and Upgrade'
+
+
+ 		* print 'serviceRequestTypeCode: Planned'
+     	* def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceFieldValidationTemplate.json')
+		* replace ServiceRequestPostTemplate
+					| 		token 						|   value   	 	  	 				      |
+				    | 		assetId   					|   assetTblAssetId   	 				      |
+				    | 		country  					|   country     		                      |
+					| 		sourceSystemCode  			|   sourceSystemCode                          |
+					| 		serviceRequestCode			|   'Karate-Insert: ' + NewServiceRequestCode |
+					|       serviceRequestStatusCode    |      'Started'		 	 				  |
+					|       serviceRequestTypeCode      |      'Planned'		 	     			  |
+					|       requester      				|      'Karate DSL'		 	  				  |
+					|       problem      				|      'Karate Complex Scenario'		 	  |
+					|       submissionTimestamp   		|    todaysDate + 'T15:53:51.597Z'	  		  |
+					|       sourceUpdateDate   			|    todaysDate + 'T15:53:51.597Z'			  |
+				    |       completionDate   			|    todaysDate + 'T15:53:51.597Z'		      |
+					|       dueDate   					|    tomorrowsDate + 'T15:53:51.597Z'		  |
+					|       availabilityDate   			|    tomorrowsDate + 'T15:53:51.597Z'		  |
+					|       remotely  				    |            '0'							  |
+					|       assetAvailability  		    |            'Up'							  |
+					|       facilityCode   				|            'US_294629'				      |
+					|       startDate   				|     todaysDate + 'T15:53:51.597Z'		      |
+					|       requestedTimestamp   		|     todaysDate + 'T15:53:51.597Z'			  |
+					|       sourceDescription   		|     'Karate Desciption'		  	  		  |
+					|       subSourceDescription   		|     'Karate Desciption DSL'		  	      |
+	
+
+    Given path 'serviceRequests/'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestPostTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'UPDATED') == true
+  	
+  	
+  	#Maint DB Check Point
+  	* def sqlQuery = 'SELECT * FROM ServiceRequest WHERE serviceRequestCode LIKE \'%' + NewServiceRequestCode + '\' AND Requester = \'Karate DSL\';'  
+  	* assert JavaMethods.executeSQLQuery(sqlQuery, 1) == true
+  	
+  	
+  	#Update to SOLR Check Point
+	#Given path 'serviceRequests/'
+    #* header Authorization = 'Bearer ' + Token
+    #And param view = 'medium'
+    #And param q = 'serviceRequestCode:*' + NewServiceRequestCode
+    #When method get
+    #Then status 200
+    #And match response $.content[0].serviceRequestTypeCode == 'Planned'
+
+
+ 		* print 'serviceRequestTypeCode: invalid pattern'
+     	* def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceFieldValidationTemplate.json')
+		* replace ServiceRequestPostTemplate
+					| 		token 						|   value   	 	  	 				      |
+				    | 		assetId   					|   assetTblAssetId   	 				      |
+				    | 		country  					|   country     		                      |
+					| 		sourceSystemCode  			|   sourceSystemCode                          |
+					| 		serviceRequestCode			|   'Karate-Insert: ' + NewServiceRequestCode |
+					|       serviceRequestStatusCode    |      'Started'		 	 				  |
+					|       serviceRequestTypeCode      |      'invalid pattern'		 	     	  |
+					|       requester      				|      'Karate DSL'		 	  				  |
+					|       problem      				|      'Karate Complex Scenario'		 	  |
+					|       submissionTimestamp   		|    todaysDate + 'T15:53:51.597Z'	  		  |
+					|       sourceUpdateDate   			|    todaysDate + 'T15:53:51.597Z'			  |
+				    |       completionDate   			|    todaysDate + 'T15:53:51.597Z'		      |
+					|       dueDate   					|    tomorrowsDate + 'T15:53:51.597Z'		  |
+					|       availabilityDate   			|    tomorrowsDate + 'T15:53:51.597Z'		  |
+					|       remotely  				    |            '0'							  |
+					|       assetAvailability  		    |            'Up'							  |
+					|       facilityCode   				|            'US_294629'				      |
+					|       startDate   				|     todaysDate + 'T15:53:51.597Z'		      |
+					|       requestedTimestamp   		|     todaysDate + 'T15:53:51.597Z'			  |
+					|       sourceDescription   		|     'Karate Desciption'		  	  		  |
+					|       subSourceDescription   		|     'Karate Desciption DSL'		  	      |
+	
+
+    Given path 'serviceRequests/'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestPostTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'FAILED') == true
+  	
+  	
+  	#Maint DB Check Point
+  	#* def sqlQuery = 'SELECT * FROM ServiceRequest WHERE serviceRequestCode LIKE \'%' + NewServiceRequestCode + '\' AND Requester = \'Karate DSL\';'  
+  	#* assert JavaMethods.executeSQLQuery(sqlQuery, 1) == true
+  	
+  	
+  	#Update to SOLR Check Point
+	#Given path 'serviceRequests/'
+    #* header Authorization = 'Bearer ' + Token
+    #And param view = 'medium'
+    #And param q = 'serviceRequestCode:*' + NewServiceRequestCode
+    #When method get
+    #Then status 200
+    #And match response $.content[0].serviceRequestTypeCode == 'Planned'
+    
+    
+    	* print 'serviceRequestTypeCode: Other'
+     	* def ServiceRequestPostTemplate = read('classpath:testsuite/testdata/ServiceRequestServiceFieldValidationTemplate.json')
+		* replace ServiceRequestPostTemplate
+					| 		token 						|   value   	 	  	 				      |
+				    | 		assetId   					|   assetTblAssetId   	 				      |
+				    | 		country  					|   country     		                      |
+					| 		sourceSystemCode  			|   sourceSystemCode                          |
+					| 		serviceRequestCode			|   'Karate-Insert: ' + NewServiceRequestCode |
+					|       serviceRequestStatusCode    |      'Started'		 	 				  |
+					|       serviceRequestTypeCode      |      'Other'		 	      				  |
+					|       requester      				|      'Karate DSL'		 	  				  |
+					|       problem      				|      'Karate Complex Scenario'		 	  |
+					|       submissionTimestamp   		|    todaysDate + 'T15:53:51.597Z'	  		  |
+					|       sourceUpdateDate   			|    todaysDate + 'T15:53:51.597Z'			  |
+				    |       completionDate   			|    todaysDate + 'T15:53:51.597Z'		      |
+					|       dueDate   					|    tomorrowsDate + 'T15:53:51.597Z'		  |
+					|       availabilityDate   			|    tomorrowsDate + 'T15:53:51.597Z'		  |
+					|       remotely  				    |            '0'							  |
+					|       assetAvailability  		    |            'Up'							  |
+					|       facilityCode   				|            'US_294629'				      |
+					|       startDate   				|     todaysDate + 'T15:53:51.597Z'		      |
+					|       requestedTimestamp   		|     todaysDate + 'T15:53:51.597Z'			  |
+					|       sourceDescription   		|     'Karate Desciption'		  	  		  |
+					|       subSourceDescription   		|     'Karate Desciption DSL'		  	      |
+	
+
+    Given path 'serviceRequests/'
+    And header Content-Type = 'application/json'
+   	And request ServiceRequestPostTemplate
+  	* header Authorization = 'Bearer ' + Token
+  	When method post
+  	Then status 200
+  	
+  	#Mongo Check Point
+  	* def loadUID = $.loadId
+  	* assert JavaMethods.checkMongoCollection('Service Request', loadUID, 'UPDATED') == true
+  	
+  	
+  	#Maint DB Check Point
+  	* def sqlQuery = 'SELECT * FROM ServiceRequest WHERE serviceRequestCode LIKE \'%' + NewServiceRequestCode + '\' AND Requester = \'Karate DSL\';'  
+  	* assert JavaMethods.executeSQLQuery(sqlQuery, 1) == true
+  	
+  	
+  	#Update to SOLR Check Point
+	#Given path 'serviceRequests/'
+    #* header Authorization = 'Bearer ' + Token
+    #And param view = 'medium'
+    #And param q = 'serviceRequestCode:*' + NewServiceRequestCode
+    #When method get
+    #Then status 200
+    #And match response $.content[0].serviceRequestTypeCode == 'Other'
+    
+    
+    
+       Scenario: Verify query parameter for Service Request GET Method: AND, OR, LIKE
+
+	#Simple Query
+    Given path 'serviceRequests/'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param q = 'serviceRequestCode:' + serviceRequestCode
+    When method get
+    Then status 200
+    And match response $.content[0].serviceRequestCode == serviceRequestCode
+
+	#AND
+    Given path 'serviceRequests/'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param q = 'serviceRequestCode:' + serviceRequestCode + ' AND srId:' + srId 
+    When method get
+    Then status 200
+    And match response $.page.size == 1
+    And match response $.content[0].srId == srId
+    
+    #OR
+    Given path 'serviceRequests/'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param q = 'serviceRequestCode:neverexists OR srId:' + srId 
+    When method get
+    Then status 200
+    And match response $.page.size == 1
+    And match response $.content[0].srId == srId
+    
+    #OR with Like
+    Given path 'serviceRequests/'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param q = 'serviceRequestCode:neverexists OR srId:*' + srId 
+    When method get
+    Then status 200
+    And match response $.page.size == 1
+    And match response $.content[0].srId == srId
+    
+    
+    Scenario: Verify query parameter for Service Request Tasks GET Method: AND, OR, LIKE
+
+	#Simple Query
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param q = 'serviceRequestCode:' + serviceRequestCode
+    When method get
+    Then status 200
+    And match response $.content[0].serviceRequestCode == serviceRequestCode
+
+	#AND
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param q = 'serviceRequestCode:' + serviceRequestCode + ' AND taskId:' + taskId 
+    When method get
+    Then status 200
+    And match response $.page.size == 1
+    And match response $.content[0].taskId == taskId
+    
+    #OR
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param q = 'serviceRequestCode:neverexists OR taskId:' + taskId 
+    When method get
+    Then status 200
+    And match response $.page.size == 1
+    And match response $.content[0].taskId == taskId
+    
+    #OR with Like
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param q = 'serviceRequestCode:neverexists OR taskId:*' + taskId 
+    When method get
+    Then status 200
+    And match response $.page.size == 1
+    And match response $.content[0].taskId == taskId
+    
+    
+    
+    Scenario: Verify sorting for Service Request Tasks GET Method: Ascending, Desecnding
+
+	#Descending
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param sort = 'desc:serviceRequestCode'
+    When method get
+    Then status 200
+    
+    #Ascending
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param sort = 'asc:serviceRequestCode'
+    When method get
+    Then status 200    
+    
+    #Both
+    Given path 'serviceRequests', 'tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param sort = 'asc:serviceRequestCode,desc:problemCode'
+    When method get
+    Then status 200 
+    
+    
+    
+     Scenario: Verify sorting for Service Request GET{ID/Tasks} Method: Ascending, Desecnding
+
+	#Descending
+    Given path 'serviceRequests/' + srId + '/tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param sort = 'desc:serviceRequestCode'
+    When method get
+    Then status 200
+    
+    #Ascending
+    Given path 'serviceRequests/' + srId + '/tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param sort = 'asc:serviceRequestCode'
+    When method get
+    Then status 200    
+    
+    #Both
+    Given path 'serviceRequests/' + srId + '/tasks'
+    * header Authorization = 'Bearer ' + Token
+    And param view = 'medium'
+    And param sort = 'asc:serviceRequestCode,desc:problemCode'
+    When method get
+    Then status 200
